@@ -56,46 +56,47 @@ export default {
 }
 </script>
 
-<style scoped>
-  .login-wrap{
+<style scoped lang="scss">
+  .login-wrap {
     position: relative;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     background-image: url(../assets/images/login-bg.jpg);
     background-size: 100%;
   }
-  .ms-title{
-    width:100%;
+  .ms-title {
+    width: 100%;
     line-height: 50px;
     text-align: center;
-    font-size:20px;
+    font-size: 20px;
     color: #fff;
     border-bottom: 1px solid #ddd;
   }
-  .ms-login{
+  .ms-login {
     position: absolute;
-    left:50%;
-    top:50%;
-    width:350px;
-    margin:-190px 0 0 -175px;
+    left: 50%;
+    top: 50%;
+    width: 350px;
+    margin: -190px 0 0 -175px;
     border-radius: 5px;
     background: rgba(255,255,255, 0.3);
     overflow: hidden;
   }
-  .ms-content{
+  .ms-content {
     padding: 30px 30px;
   }
-  .login-btn{
+  .login-btn {
     text-align: center;
+    button {
+      width: 100%;
+      height: 36px;
+      margin-bottom: 10px;
+    }
   }
-  .login-btn button{
-    width:100%;
-    height:36px;
-    margin-bottom: 10px;
+  .login-tips {
+    font-size: 12px;
+    line-height: 30px;
+    color: #fff;
   }
-  .login-tips{
-    font-size:12px;
-    line-height:30px;
-    color:#fff;
-  }
+
 </style>

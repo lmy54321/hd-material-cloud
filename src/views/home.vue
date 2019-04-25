@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import vHead from '../components/header/header'
-import vSidebar from '../components/left_side_nav/left_side_nav'
-import vTags from '../components/tag/Tags.vue'
+import vHead from '../components/header/header'// 头部
+import vSidebar from '../components/left_side_bar/left_side_bar'// 左侧菜单
+import vTags from '../components/tag/Tags.vue'// 标签关闭
 import ObVue from '../components/common/ob_vue'
 export default {
   data () {

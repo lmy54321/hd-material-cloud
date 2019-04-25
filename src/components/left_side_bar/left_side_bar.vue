@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+             text-color="#bfcbd9" active-text-color="#20a0ff" :unique-opened="unique" :router="router">
       <template v-for="item in items">
         <template v-if="item.subs">
           <el-submenu :index="item.index" :key="item.index">
@@ -36,58 +36,14 @@ import ObVue from '../common/ob_vue'
 export default {
   data () {
     return {
-      collapse: false,
-      items: [
-        {
-          icon: 'el-icon-menu',
-          // index对应于router中路径
-          index: 'dashboard',
-          title: '系统首页'
-        },
-        {
-          icon: 'iconfont icon-jinpaigongyings',
-          index: '2',
-          title: '供应商',
-          subs: [
-            {
-              index: 's_message',
-              title: '我的投标'
-            },
-            {
-              index: '2-2',
-              title: '保证金缴纳凭证上传',
-              subs: [
-                {
-                  index: 'bid_bond_payment_certificate',
-                  title: '投标保证金缴纳上传'
-                },
-                {
-                  index: 'performance_bond_payment_certificate',
-                  title: '履约保证金缴纳上传'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          icon: 'iconfont icon-jingpaicaigoushang',
-          index: '3',
-          title: '采购商',
-          subs: [
-            {
-              index: 'qualified_supplier_settings',
-              title: '合格供应设置'
-            },
-            {
-              index: 'qualified_suppliers_list',
-              title: '合格供应商预设列表'
-            }
-          ]
-        }
-      ]
+      collapse: false, // 是否水平折叠收起菜单
+      unique: true, // 是否只保持一个子菜单的展开
+      router: true, // 是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转
+      items: this.$store.state.data // 获取存在store中的左侧菜单数据
     }
   },
   computed: {
+    // 当前激活菜单的 index
     onRoutes () {
       return this.$route.path.replace('/', '')
     }
@@ -101,34 +57,35 @@ export default {
 }
 </script>
 
-<style scoped>
-  .sidebar{
+<style lang="scss">
+  .sidebar {
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
-    bottom:0;
+    top: 60px;
+    bottom: 0;
     overflow-y: scroll;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+    & > ul {
+      height: 100%;
+    }
   }
-  .sidebar::-webkit-scrollbar{
-    width: 0;
-  }
-  .sidebar-el-menu:not(.el-menu--collapse){
-    width: 250px;
-  }
-  .sidebar > ul {
-    height:100%;
+  .sidebar-el-menu {
+    &:not(.el-menu--collapse) {
+      width: 250px;
+    }
   }
   .icon-jingpaicaigoushang {
     font-size: 20px;
     color: #fff;
     margin-right: 5px;
-
   }
- .icon-jinpaigongyings {
+  .icon-jinpaigongyings {
     font-size: 20px;
     color: #fff;
     margin-right: 5px;
+  }
 
- }
 </style>

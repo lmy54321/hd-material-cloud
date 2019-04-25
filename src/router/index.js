@@ -1,5 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+/**
+ * author：李茂源
+ * time：2019-04-23
+ * description：配置路由地址
+ */
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -9,7 +15,7 @@ export default new Router({
     },
     {
       path: '/',
-      component: resolve => require(['../views/home'], resolve),
+      component: resolve => require(['../views/home'], resolve), // 路由懒加载
       meta: { title: '主页' },
       children: [
         {

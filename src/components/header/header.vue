@@ -47,7 +47,7 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
+      name: '李茂源',
       message: 2
     }
   },
@@ -105,41 +105,44 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss">
+  /*header的高度*/
+  $header_height: 60px;
+
   .header {
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    height: 70px;
+    height: $header_height;
     font-size: 22px;
     color: #fff;
+    .logo {
+      float: left;
+      width: 250px;
+      line-height: $header_height;
+    }
   }
-  .collapse-btn{
+  .collapse-btn {
     float: left;
     padding: 0 21px;
     cursor: pointer;
-    line-height: 70px;
+    line-height: $header_height;
   }
-  .header .logo{
-    float: left;
-    width:250px;
-    line-height: 70px;
-  }
-  .header-right{
+  .header-right {
     float: right;
     padding-right: 50px;
   }
-  .header-user-con{
+  .header-user-con {
     display: flex;
-    height: 70px;
+    height: 60px;
     align-items: center;
   }
-  .btn-fullscreen{
+  .btn-fullscreen {
     transform: rotate(45deg);
     margin-right: 5px;
     font-size: 24px;
   }
-  .btn-bell, .btn-fullscreen{
+  .btn-bell, .btn-fullscreen {
     position: relative;
     width: 30px;
     height: 30px;
@@ -147,7 +150,7 @@ export default {
     border-radius: 15px;
     cursor: pointer;
   }
-  .btn-bell-badge{
+  .btn-bell-badge {
     position: absolute;
     right: 0;
     top: -2px;
@@ -157,26 +160,29 @@ export default {
     background: #f56c6c;
     color: #fff;
   }
-  .btn-bell .el-icon-bell{
-    color: #fff;
+  .btn-bell {
+    .el-icon-bell {
+      color: #fff;
+    }
   }
-  .user-name{
+  .user-name {
     margin-left: 10px;
   }
-  .user-avator{
+  .user-avator {
     margin-left: 20px;
+    img {
+      display: block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
   }
-  .user-avator img{
-    display: block;
-    width:40px;
-    height:40px;
-    border-radius: 50%;
-  }
-  .el-dropdown-link{
+  .el-dropdown-link {
     color: #fff;
     cursor: pointer;
   }
-  .el-dropdown-menu__item{
+  .el-dropdown-menu__item {
     text-align: center;
   }
+
 </style>

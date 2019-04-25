@@ -5,6 +5,7 @@ import axios from 'axios'
 /**
  * author：李茂源
  * time：2019-04-23
+ * description：封装了网络请求方法，通过vuex即可调用请求后的数据
  */
 Vue.use(Vuex)
 
