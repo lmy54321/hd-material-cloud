@@ -16,7 +16,7 @@
       </el-form-item>
     </el-col>
     <el-col sm:='11' :md='7' :lg="5">
-      <el-form-item label="物资名">
+      <el-form-item label="物资">
         <el-input v-model="formInline.user" placeholder="按物资名搜索"></el-input>
       </el-form-item>
     </el-col>
