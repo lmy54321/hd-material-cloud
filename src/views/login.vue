@@ -3,20 +3,25 @@
     <div class="ms-login">
       <div class="ms-title">物资云平台</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+        <!--用户名-->
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" placeholder="username">
             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
           </el-input>
         </el-form-item>
+        <!--密码-->
         <el-form-item prop="password">
           <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
             <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
           </el-input>
         </el-form-item>
+        <div class="login-other">
+          <router-link to='/supplier_apply'>供应商申请</router-link>
+          <router-link to='/forget_password'>忘记密码？</router-link>
+        </div>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         </div>
-        <p class="login-tips">Tips : 用户名和密码随便填。</p>
       </el-form>
     </div>
   </div>
@@ -61,7 +66,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../assets/images/login-bg.jpg);
+    background-image: url(../assets/images/bg.jpg);
     background-size: 100%;
   }
   .ms-title {
@@ -85,18 +90,23 @@ export default {
   .ms-content {
     padding: 30px 30px;
   }
+  .login-other {
+     a {
+      color: #fff;
+      font-size: 13px;
+       &:last-child {
+         float: right;
+       }
+    }
+  }
   .login-btn {
     text-align: center;
+    margin-top: 5px;
     button {
       width: 100%;
       height: 36px;
       margin-bottom: 10px;
     }
-  }
-  .login-tips {
-    font-size: 12px;
-    line-height: 30px;
-    color: #fff;
   }
 
 </style>

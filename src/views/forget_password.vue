@@ -1,10 +1,10 @@
 <template>
-<div>我是合格供应商设置</div>
+  <div>6666</div>
 </template>
 
 <script>
 export default {
-  name: 'qualified_supplier_settings'
+  name: 'forget_password'
 }
 </script>
 

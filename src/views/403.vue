@@ -8,7 +8,9 @@
           </router-link>
           <el-button class="error-btn" type="primary" size="large" @click="goBack">返回上一页</el-button>
       </div>
+    <div>66666666666</div>
   </div>
+
 </template>
 
 <script>

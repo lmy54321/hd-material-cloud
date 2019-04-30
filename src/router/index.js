@@ -41,7 +41,7 @@ export default new Router({
         {
           // 合格供应商设置
           path: '/qualified_supplier_settings',
-          component: resolve => require(['../views/purchaser/qualified_supplier_settings'], resolve),
+          component: resolve => require(['../views/purchaser/qualified_supplier_settings/qualified_supplier_settings'], resolve),
           meta: { title: '合格供应商设置' }
         },
         {
@@ -65,6 +65,22 @@ export default new Router({
     {
       path: '/login',
       component: resolve => require(['../views/login'], resolve)
+    },
+    {
+      path: '/403',
+      component: resolve => require(['../views/403'], resolve)
+    },
+    {
+      path: '/404',
+      component: resolve => require(['../views/404'], resolve)
+    },
+    {
+      path: '/forget_password',
+      component: resolve => require(['../views/forget_password'], resolve)
+    },
+    {
+      path: '/supplier_apply',
+      component: resolve => require(['../views/supplier_apply'], resolve)
     },
     {
       path: '*',

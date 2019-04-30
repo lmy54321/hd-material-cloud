@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <!-- 进入首页默认加载的路由 -->
     <router-view></router-view>
   </div>
