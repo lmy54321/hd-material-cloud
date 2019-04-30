@@ -364,7 +364,7 @@
           }
         }
       },
-      // 选市
+      // 选城市
       choseCity: function (e) {
         console.log(e)
         for (let i in this.citys) {
