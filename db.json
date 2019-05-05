@@ -37,7 +37,7 @@
       "subs": [
         {
           "index": "qualified_supplier_settings",
-          "title": "合格供应设置"
+          "title": "合格供应商设置"
         },
         {
           "index": "qualified_suppliers_list",
