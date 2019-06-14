@@ -22,7 +22,23 @@ module.exports = {
     //配置转化：从3000 => 8080
     //模拟数据配的的代理服务器
     proxyTable:{
-      '/api':'http://localhost:3000/'
+      '/api':'http://localhost:3000/',
+      // 供应商申请
+      '/supplierUrl': {
+        target: 'http://192.168.1.102:7050', //源地址
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/supplierUrl': '' //路径重写
+        }
+      },
+      // 用户登录
+      '/LoginUrl': {
+        target: 'http://192.168.1.102:7010', //源地址
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/LoginUrl': '' //路径重写
+        }
+      }
     },
 
     // Use Eslint Loader?

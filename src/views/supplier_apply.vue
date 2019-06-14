@@ -9,16 +9,16 @@
           <el-row type="flex" justify="center">
             <el-col :span="13">
               <div class="grid-content bg-purple">
-                <el-form-item label="公司名称：" prop="supplier_name">
+                <el-form-item label="公司名称：" prop="supplierName">
                   <el-input v-model="ruleForm.supplierName"></el-input>
                 </el-form-item>
               </div>
             </el-col>
             <el-col :span="10" type="flex" justify="center">
               <div class="grid-content bg-purple">
-                <el-form-item label="所属省份：" prop="province">
+                <el-form-item label="所属省份：" prop="provinceCode">
                   <el-select
-                    v-model="ruleForm.province"
+                    v-model="ruleForm.provinceCode"
                     @change="choseProvince"
                     placeholder="省级地区">
                     <el-option
@@ -35,9 +35,9 @@
           <el-row type="flex" justify="center">
             <el-col :span="13">
               <div class="grid-content bg-purple">
-                <el-form-item label="所属城市：" prop="city">
+                <el-form-item label="所属城市：" prop="cityCode">
                   <el-select
-                    v-model="ruleForm.city"
+                    v-model="ruleForm.cityCode"
                     @change="choseCity"
                     placeholder="市级地区">
                     <el-option
@@ -54,7 +54,7 @@
               <div class="grid-content bg-purple-light">
                 <el-form-item label="所属区县：" prop="block">
                   <el-select
-                    v-model="ruleForm.block"
+                    v-model="ruleForm.countyCode"
                     @change="choseBlock"
                     placeholder="区级地区">
                     <el-option
@@ -70,27 +70,27 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="13"><div class="grid-content bg-purple">
-              <el-form-item label="详细地址：" prop="detail_region">
+              <el-form-item label="详细地址：" prop="streetAddress">
                 <el-input v-model="ruleForm.streetAddress"></el-input>
               </el-form-item>
             </div>
             </el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
-              <el-form-item label="公司联系电话：" prop="supplier_phone">
-                <el-input v-model.number="ruleForm.supplier_phone"></el-input>
+              <el-form-item label="公司联系电话：" prop="supplierPhone">
+                <el-input v-model.number="ruleForm.supplierPhone"></el-input>
               </el-form-item>
             </div>
             </el-col>
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="13"><div class="grid-content bg-purple">
-              <el-form-item label="法人姓名：" prop="legal_person_name">
+              <el-form-item label="法人姓名：" prop="legalPerson">
                 <el-input v-model="ruleForm.legalPerson"></el-input>
               </el-form-item>
             </div>
             </el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
-              <el-form-item label="法人身份证：" prop="legal_person_id_card">
+              <el-form-item label="法人身份证：" prop="legalPersonCardNo">
                 <el-input v-model="ruleForm.legalPersonCardNo"></el-input>
               </el-form-item>
             </div>
@@ -98,43 +98,43 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="13"><div class="grid-content bg-purple">
-              <el-form-item label="联系人姓名：" prop="contacts_name">
+              <el-form-item label="联系人姓名：" prop="contactsName">
                 <el-input v-model="ruleForm.contactsName"></el-input>
               </el-form-item>
             </div>
             </el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
-              <el-form-item label="联系人性别：" prop="sex">
-                <el-radio v-model="ruleForm.contactsSex" label="男">男</el-radio>
-                <el-radio v-model="ruleForm.contactsSex" label="女">女</el-radio>
+              <el-form-item label="联系人性别：" prop="contactsSex">
+                <el-radio v-model="ruleForm.contactsSex" label="man">男</el-radio>
+                <el-radio v-model="ruleForm.contactsSex" label="woman">女</el-radio>
               </el-form-item>
             </div>
             </el-col>
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="13"><div class="grid-content bg-purple">
-              <el-form-item label="联系人邮箱：" prop="email">
+              <el-form-item label="联系人邮箱：" prop="mailbox">
                 <el-input v-model="ruleForm.mailbox"></el-input>
               </el-form-item>
             </div>
             </el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
-              <el-form-item label="联系人电话：" prop="contacts_phone">
-                <el-input v-model.number="ruleForm.contactsPhone"></el-input>
+              <el-form-item label="联系人电话：" prop="contactsPhone">
+                <el-input v-model.number="ruleForm.contactsPhone" autocomplete="off"></el-input>
               </el-form-item>
             </div>
             </el-col>
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="13"><div class="grid-content bg-purple">
-              <el-form-item label="组织机构代码：" prop="organizational_code">
+              <el-form-item label="组织机构代码：" prop="creditCode">
                 <el-input v-model.number="ruleForm.creditCode"></el-input>
               </el-form-item>
             </div>
             </el-col>
             <el-col :span="10"><div class="grid-content bg-purple">
-              <el-form-item label="行业类别：" prop="industry_category">
-                <el-select v-model="ruleForm.industryName" placeholder="请选择">
+              <el-form-item label="行业类别：" prop="industryCode">
+                <el-select v-model="ruleForm.industryCode"  @change="choseIndustry" placeholder="请选择">
                   <el-option
                     v-for="item in industry_category_options"
                     :key="item.value"
@@ -187,11 +187,12 @@
 </template>
 <script>
   import axios from 'axios'
-
+  import ObVue from '../components/common/ob_vue'
   export default {
     data () {
-      // 自定义手机号验证
-      let checkPhone = (rule, value, callback) => {
+      // 供应商手机号验证
+      let checkSupplierPhone = (rule, value, callback) => {
+        console.log(value)
           if (!value) {
             return callback(new Error('手机号不能为空'))
           } else {
@@ -204,28 +205,43 @@
             }
           }
         }
+      // 联系人手机号验证
+      let checkContactsPhone = (rule, value, callback) => {
+        console.log(value)
+        if (!value) {
+          return callback(new Error('手机号不能为空'))
+        } else {
+          const reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/
+          console.log(reg.test(value))
+          if (reg.test(value)) {
+            callback()
+          } else {
+            return callback(new Error('请输入正确的手机号'))
+          }
+        }
+      }
       return {
         ruleForm: {
           supplierName: '',
           streetAddress: '',
           legalPerson: '',
           legalPersonCardNo: '',
-          supplier_phone: '',
+          supplierPhone: '',
           contactsName: '',
           contactsPhone: '',
           mailbox: '',
           contactsSex: '',
           creditCode: '',
-          industryName: '',
-          province: '',
-          city: '',
-          block: ''
+          industryCode: '',
+          provinceCode: '',
+          cityCode: '',
+          countyCode: ''
         },
         industry_category_options: [{
-          value: '选项1',
+          value: '001',
           label: '新能源'
         }, {
-          value: '选项2',
+          value: '002',
           label: 'it行业'
         }],
         mapJson: '../static/json/map.json',
@@ -235,50 +251,54 @@
         block_datas: '',
         dialogImageUrl: '',
         dialogVisible: false,
-
+        // 校验规则
         rules: {
-          supplier_name: [
+          supplierName: [
             {required: true, message: '请输入供应商名称', trigger: 'change'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+            {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
           ],
-          detail_region: [
-            {required: true, message: '请选择活动区域', trigger: 'change'}
+          streetAddress: [
+            {required: true, message: '请填写详细地址', trigger: 'change'},
+            {min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur'}
           ],
-          province: [
+          provinceCode: [
             {required: true, message: '请选择省份', trigger: 'change'}
           ],
-          city: [
+          cityCode: [
             {required: true, message: '请选择城市', trigger: 'change'}
           ],
-          block: [
+          countyCode: [
             {required: true, message: '请选择区县', trigger: 'change'}
           ],
-          legal_person_name: [
+          legalPerson: [
             {required: true, message: '请输入法人姓名', trigger: 'change'},
-            {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
+            {min: 2, max: 7, message: '长度在 2 到 7 个字符', trigger: 'blur'}
           ],
-          legal_person_id_card: [
+          legalPersonCardNo: [
             {required: true, message: '请输入法人身份证号码', trigger: 'change'},
             {min: 18, max: 18, message: '长度为18个字符', trigger: 'blur'}
           ],
-          supplier_phone: [
-            {validator: checkPhone, trigger: 'change'}
+          supplierPhone: [
+            {validator: checkSupplierPhone, trigger: 'blur'}
           ],
-          contacts_name: [
+          contactsName: [
             {required: true, message: '请输入联系人姓名', trigger: 'change'},
             {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
           ],
-          contacts_phone: [
-            {required: true, message: '请输入联系人电话', trigger: 'change'},
-            {validator: checkPhone, trigger: 'change'}
+          contactsPhone: [
+            {validator: checkContactsPhone, trigger: 'blur'}
           ],
-          email: [
+          mailbox: [
             {required: true, message: '请输入联系邮箱', trigger: 'change'},
             {type: 'email', message: '请输入正确的邮箱', trigger: 'blur'}
           ],
-          organizational_code: [
+          creditCode: [
             {required: true, message: '请输入组织机构代码', trigger: 'change'},
-            {type: 'number', message: '请输入正确的组织机构代码', trigger: 'change'}
+            {type: 'number', message: '请输入正确的组织机构代码', trigger: 'blur'}
+          ],
+          industryCode: [
+            {required: true, message: '请选择行业种类', trigger: 'change'},
+            {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
           ],
           sex: [
             {required: true, message: '请选择性别', trigger: 'change'}
@@ -291,13 +311,29 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('提交的申请信息：' + JSON.stringify(this.ruleForm))
+            this.ruleForm.provinceName = sessionStorage.getItem('provinceName')
+            this.ruleForm.cityName = sessionStorage.getItem('cityName')
+            this.ruleForm.countyName = sessionStorage.getItem('countyName')
+            this.ruleForm.industryName = sessionStorage.getItem('industryName')
+            this.ruleForm.industryId = '003'
+            this.$store.dispatch('ajax', {url: '/supplierUrl/v1/supplier/info',
+              submitData: this.ruleForm,
+              success: function (res) {
+                if (res.status === 'OK') {
+                  this.$message({
+                    message: '申请成功！',
+                    type: 'success'
+                  })
+                } else {
+                  ObVue.$message.error('申请失败')
+                }
+              }})
           } else {
             console.log('error submit!!')
             return false
           }
         },
-          this.$refs.upload.submit())
+         this.$refs.upload.submit())
       },
       // 退出申请
       exit () {
@@ -363,6 +399,12 @@
             this.E = this.block_datas[0].id
           }
         }
+        // 获取省名
+        let obj = {}
+        obj = this.provinces.find((item) => {
+          return item.id === e
+        })
+        sessionStorage.setItem('provinceName', obj.value)
       },
       // 选城市
       choseCity: function (e) {
@@ -376,12 +418,33 @@
             console.log(this.E)
           }
         }
+        // 获取市名
+        let obj = {}
+        obj = this.city_datas.find((item) => {
+          return item.id === e
+        })
+        sessionStorage.setItem('cityName', obj.value)
       },
       // 选区
       choseBlock: function (e) {
         this.E = e
         console.log(this.E + '区代码')
+        // 获取区县名
+        let obj = {}
+        obj = this.block_datas.find((item) => {
+          return item.id === e
+        })
+        sessionStorage.setItem('countyName', obj.value)
       },
+      // 选行业
+      choseIndustry: function (e) {
+        // 获行业名
+        let obj = {}
+        obj = this.industry_category_options.find((item) => {
+          return item.value === e
+        })
+        sessionStorage.setItem('industryName', obj.value)
+  },
       // 图片处理
       handleRemove (file, fileList) {
         console.log(file, fileList)
@@ -408,6 +471,16 @@
       this.getCityData()
     }
   }
+  // function jsonToForm (data) {
+  //     var res = new FormData()
+  //     for (var i in data) {
+  //       res.append(i, data[i])
+  //       console.log(i)
+  //       console.log(data[i])
+  //     }
+  //   console.log(res)
+  //     return res
+  // }
 </script>
 <style  lang="scss">
   .apply_wrap {

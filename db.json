@@ -15,6 +15,36 @@
           "title": "我的投标"
         },
         {
+          "index": "institution",
+          "title": "组织机构"
+        },
+        {
+          "index": "roleinfo",
+          "title": "角色信息"
+        },
+        {
+          "index": "PositionManagement",
+          "title": "职位管理"
+        },
+        {
+          "index": "PeopleManagement",
+          "title": "人员信息管理"
+        },
+        {
+          "index": "supplierinfo",
+          "title": "供应商信息",
+          "subs": [
+            {
+              "index": "supplierinfomodify",
+              "title": "信息完善"
+            },
+            {
+              "index": "showinfo",
+              "title": "信息查看"
+            }
+          ]
+        },
+        {
           "index": "bond_payment_certificate",
           "title": "保证金缴纳凭证上传",
           "subs": [

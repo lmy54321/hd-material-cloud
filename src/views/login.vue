@@ -4,14 +4,14 @@
       <div class="ms-title">物资云平台</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
         <!--用户名-->
-        <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="username">
+        <el-form-item prop="account" >
+          <el-input v-model="ruleForm.account" placeholder="输入账号">
             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
           </el-input>
         </el-form-item>
         <!--密码-->
         <el-form-item prop="password">
-          <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+          <el-input type="password" placeholder="输入密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
             <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
           </el-input>
         </el-form-item>
@@ -28,15 +28,16 @@
 </template>
 
 <script>
+ // import ObVue from '../components/common/ob_vue'
 export default {
   data: function () {
     return {
       ruleForm: {
-        username: 'admin',
-        password: '123123'
+        account: '12345678',
+        password: '12345678'
       },
       rules: {
-        username: [
+        account: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
@@ -49,7 +50,16 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          localStorage.setItem('ms_username', this.ruleForm.username)
+          localStorage.setItem('ms_username', this.ruleForm.account)
+          // this.$store.dispatch('ajax', {url: 'LoginUrl/v1/user/login',
+          //   submitData: this.ruleForm,
+          //   success: function (res) {
+          //     if (res.status === 'OK') {
+          //       this.$router.push('/')
+          //     } else {
+          //       ObVue.$message.error('请输入正确的账号名或密码')
+          //     }
+          //   }})
           this.$router.push('/')
         } else {
           console.log('error submit!!')
