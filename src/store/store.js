@@ -9,7 +9,17 @@ import axios from 'axios'
  */
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
+// 设置axios为form-data
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.transformRequest = [function (data) {
+  let ret = ''
+  for (let it in data) {
+    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+  }
+  return ret
+}]
+var store = new Vuex.Store({
   // 初始化数据，只要有可能的用到的最好都初始化
   state: {
     text: {name: '李茂源'},
@@ -24,8 +34,9 @@ const store = new Vuex.Store({
   actions: {
     // 封装一个ajax方法 ，data里为action以荷载方式分发时传的参数
     ajax (context, data) {
-      axios.get(data.url, context.state.text)
+      axios.post(data.url, data.submitData)
         .then(res => { // 调用接口
+          data.success(res.data)
           console.log(res.data)
           context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
         }).catch(error => {

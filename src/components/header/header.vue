@@ -48,7 +48,7 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: '李茂源',
+      name: 'admin',
       message: 2
     }
   },

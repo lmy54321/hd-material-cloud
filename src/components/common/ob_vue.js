@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-// 使用 Event Bus
+// 公共vue实例
 const ObVue = new Vue()
 
 export default ObVue

@@ -29,13 +29,43 @@ export default new Router({
           meta: { title: '供应商消息' }
         },
         {
+          path: '/institution',
+          component: resolve => require(['../views/supplier/institution/institution'], resolve),
+          meta: { title: '组织机构' }
+        },
+        {
+          path: '/roleinfo',
+          component: resolve => require(['../views/supplier/roleinfo/roleinfo'], resolve),
+          meta: { title: '角色信息' }
+        },
+        {
+          path: '/PositionManagement',
+            component: resolve => require(['../views/supplier/PositionManagement/PositionManagement'], resolve),
+          meta: { title: '职位管理' }
+        },
+        {
+          path: '/PeopleManagement',
+          component: resolve => require(['../views/supplier/PeopleManagement/PeopleManagement'], resolve),
+          meta: { title: '人员信息管理' }
+        },
+        {
+          path: '/supplierinfomodify',
+          component: resolve => require(['../views/supplier/supplierinfo/supplierinfomodify'], resolve),
+          meta: { title: '信息修改' }
+        },
+        {
+          path: '/showinfo',
+          component: resolve => require(['../views/supplier/supplierinfo/showinfo'], resolve),
+          meta: { title: '信息查看' }
+        },
+        {
           path: '/bid_bond_payment_certificate',
-          component: resolve => require(['../views/supplier/bid_bond_payment_certificate'], resolve),
+          component: resolve => require(['../views/supplier/bond_payment_upload/bid_bond_payment_certificate'], resolve),
           meta: { title: '投标保证金上传' }
         },
         {
           path: '/performance_bond_payment_certificate',
-          component: resolve => require(['../views/supplier/performance_bond_payment_certificate'], resolve),
+          component: resolve => require(['../views/supplier/bond_payment_upload/performance_bond_payment_certificate'], resolve),
           meta: { title: '履约保证金上传' }
         },
         {
