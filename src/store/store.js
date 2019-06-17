@@ -42,7 +42,18 @@ var store = new Vuex.Store({
         }).catch(error => {
           console.log(error)
         })
+    },
+    ajaxGet (context, data) {
+      axios.get(data.url, data.submitData)
+        .then(res => { // 调用接口
+          data.success(res.data)
+          console.log(res.data)
+          context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
+        }).catch(error => {
+        console.log(error)
+      })
     }
+
   }
 })
 export default store
