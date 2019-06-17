@@ -18,7 +18,7 @@
       </el-date-picker>
     </el-col>
     <el-col :span="4" style="margin-top: 15px;display: flex;align-items: center">
-      <el-input placeholder="请输入机构名称" v-model="input3">
+      <el-input placeholder="请输入机构名称" v-model="QueryInstitution">
       </el-input>
       <el-button type="primary" icon="el-icon-search"></el-button>
     </el-col>
@@ -42,6 +42,11 @@
             type="selection"
             width="55">
           </el-table-column>
+            <el-table-column
+              prop="departId"
+              label="部门主键"
+              class-name="visiable">
+            </el-table-column>
           <el-table-column
             prop="date"
             label="创建时间">
@@ -69,11 +74,11 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除<i class="el-icon-delete el-icon--right"></i></el-button>
+              @click="departDelete(scope.$index, scope.row)">删除<i class="el-icon-delete el-icon--right"></i></el-button>
               <el-button
                 size="mini"
                 type="info"
-                @click="handleDelete(scope.$index, scope.row)">修改<i class="el-icon-edit el-icon--right"></i></el-button>
+                @click="departModify(scope.$index, scope.row)">修改<i class="el-icon-edit el-icon--right"></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -112,13 +117,7 @@
           <el-button type="primary" @click="submitForm('NewBuiltForm')">确 定</el-button>
         </div>
       </el-dialog>
-      <el-tree
-        :props="props"
-        :load="loadNode"
-        lazy
-        show-checkbox
-        @check-change="handleCheckChange">
-      </el-tree>
+      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" ></el-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="NewDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="chooseDepart()">确 定</el-button>
@@ -136,6 +135,9 @@
       return {
         NewDialogVisible: false,
         innerVisible: false,
+        QueryInstitution: '',
+        parentId: '',
+        pathTxt: '',
         NewBuiltForm: {
           depart_name: '',
           depart_status: '',
@@ -221,67 +223,88 @@
         },
         value1: '',
         value2: '',
-        props: {
-          label: 'name',
-          children: 'zones'
-        },
-        count: 1
+        data: [{
+          label: '菲蒂科',
+          id: '000',
+          children: [{
+            label: '研发部',
+            id: '001',
+            children: [{
+              label: '第一研发小组',
+              id: '011',
+              path: '研发部,第一研发小组'
+            }]
+          }]
+        }, {
+          label: '华东电气',
+          id: '111',
+          children: [{
+            label: '工程部',
+            id: '110',
+            path: '华东电气,工程部 ',
+            children: [{
+              label: '施工一组',
+              id: '100'
+            }]
+          }, {
+            label: '销售部',
+            id: '222',
+            children: [{
+              label: '销售一组',
+              id: '220'
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
       }
     },
     methods: {
-      chooseDepart () {
-          this.innerVisible = true
+      // 删除组织机构
+      departDelete (index, row) {
+          console.log(index)
+        console.log(row)
       },
-      handleCheckChange (data, checked, indeterminate) {
-        console.log(data, checked, indeterminate)
+      chooseDepart () {
+          if (this.parentId === null || this.parentId === '') {
+            ObVue.$message({
+              showClose: true,
+              message: '请选择一个父级部门！',
+              type: 'warning'
+            })
+          } else {
+            this.innerVisible = true
+          }
       },
       handleNodeClick (data) {
-        console.log(data)
+        console.log(data.path)
+        this.pathTxt = data.path
+        this.parentId = data.id
       },
-      loadNode (node, resolve) {
-        if (node.level === 0) {
-          return resolve([{ name: 'region1' }, { name: 'region2' }])
-        }
-        if (node.level > 3) return resolve([])
-
-        var hasChild
-        if (node.data.name === 'region1') {
-          hasChild = true
-        } else if (node.data.name === 'region2') {
-          hasChild = false
-        } else {
-          hasChild = Math.random() > 0.5
-        }
-
-        setTimeout(() => {
-          var data
-          if (hasChild) {
-            data = [{
-              name: 'zone' + this.count++
-            }, {
-              name: 'zone' + this.count++
-            }]
-          } else {
-            data = []
-          }
-
-          resolve(data)
-        }, 500)
-      },
+      // currentClick (data, node) {
+      //   console.log(data)
+      //   console.log(node)
+      // },
       submitForm (NewBuiltForm) {
         this.$refs[NewBuiltForm].validate((valid) => {
             if (valid) {
+              console.log('aa' + this.parentId)
               this.NewDialogVisible = false
+              this.NewBuiltForm.parentId = this.parentId
+              this.NewBuiltForm.pathTxt = this.pathTxt
+              console.log(JSON.toString(this.NewBuiltForm))
               this.$store.dispatch('ajax', {url: '/supplierUrl/v1/supplier/info',
-                submitData: this.ruleForm,
+                submitData: this.NewBuiltForm,
                 success: function (res) {
                   if (res.status === 'OK') {
                     this.$message({
-                      message: '删除成功！',
+                      message: '添加成功！',
                       type: 'success'
                     })
                   } else {
-                    ObVue.$message.error('删除失败')
+                    ObVue.$message.error('添加失败')
                   }
                 }})
             } else {
@@ -303,6 +326,20 @@
           console.log(amount)
         }
       }
+  },
+    created () {
+    // 请求列表数据
+    this.$store.dispatch('ajaxGet', {url: '/supplierUrl/v1/supplier/department',
+      success: function (res) {
+        console.log(res.data.length)
+        for (let i = 0; i < res.data.length; i++) {
+          console.log(i)
+        }
+      for (let prop in res.data) {
+          console.log(prop)
+      }
+      console.log(res.data)
+      }})
   }
   }
 </script>
@@ -314,6 +351,9 @@
   padding: 5px 0px 5px 5px;
   margin-top: 15px;
   background-color: #fff;
+}
+.visiable {
+  display: none;
 }
 .table-style {
   margin-top: 20px;
