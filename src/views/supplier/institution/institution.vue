@@ -3,72 +3,43 @@
 <!--description：组织机构管理界面-->
 <template>
   <div style="width: 100%">
-  <el-row type="flex">
-    <el-col :span="7" style="margin-top: 15px;display: flex;align-items: center">
-      <span style="width:85px">机构查询：</span>
-      <el-date-picker
-        v-model="value2"
-        type="daterange"
-        align="right"
-        unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions">
-      </el-date-picker>
-    </el-col>
-    <el-col :span="4" style="margin-top: 15px;display: flex;align-items: center">
-      <el-input placeholder="请输入机构名称" v-model="QueryInstitution">
-      </el-input>
-      <el-button type="primary" icon="el-icon-search"></el-button>
-    </el-col>
-  </el-row >
   <el-row class="header-bg" type="flex" algin="middle" >
     <el-col >
       <el-button type="primary" @click="NewDialogVisible = true" >新增机构<i class="el-icon-edit el-icon--right"></i></el-button>
-      <el-button type="danger" v-on:click="Delete(selectAmount)">批量删除<i class="el-icon-delete el-icon--right"></i></el-button>
     </el-col>
   </el-row >
     <el-row class="table-style">
       <el-col>
         <el-table
-          :data="tableData"
-          height="400"
+          :data="tableDatas"
+          height="600"
           border
+          highlight-current-row
           @select-all="selectAll"
           @selection-change="handleSelectionChange"
+          row-key="departId"
           style="width: 100%">
           <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-            <el-table-column
-              prop="departId"
-              label="部门主键"
-              class-name="visiable">
-            </el-table-column>
-          <el-table-column
-            prop="date"
-            label="创建时间">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="创建者">
-          </el-table-column>
-          <el-table-column
-            prop="date"
+            prop="departName"
             label="部门名称">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="部门状态">
+            prop="departCode"
+            label="部门编码">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="departIntroduce"
             label="部门介绍">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="creatorName"
+            label="创建者">
+          </el-table-column>
+          <el-table-column
+            prop="createTime"
+            label="创建时间">
+          </el-table-column>
+          <el-table-column
             label="操作">
             <template slot-scope="scope">
             <el-button
@@ -78,38 +49,37 @@
               <el-button
                 size="mini"
                 type="info"
-                @click="departModify(scope.$index, scope.row)">修改<i class="el-icon-edit el-icon--right"></i></el-button>
+                @click="departModify(scope.$index, scope.row)">修改 / 查看<i class="el-icon-edit el-icon--right"></i></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
-    <el-dialog title="选择父级部门" :visible.sync="NewDialogVisible"  width="30%">
+    <!--新建机构-->
+    <el-dialog title="选择父级部门" :visible.sync="NewDialogVisible"  width="30%"  top="20vh">
       <el-dialog
         width="30%"
         title="新建机构"
         :visible.sync="innerVisible"
-        append-to-body>
+        :close-on-click-modal="clickClose"
+        append-to-body @close="innerDialogClose('NewBuiltForm')" >
         <el-form :model="NewBuiltForm" :rules="rules" ref="NewBuiltForm">
-          <el-form-item label="部门名称" :label-width="formLabelWidth" prop="depart_name">
-            <el-input v-model="NewBuiltForm.depart_name " autocomplete="off" maxlength="10" show-word-limit></el-input>
+          <el-form-item label="父级部门名称：" :label-width="formLabelWidth" v-if="isShow">
+            <span>{{departName}}</span>
           </el-form-item>
-          <el-form-item label="部门状态" :label-width="formLabelWidth" prop="depart_status" >
-            <el-select v-model="NewBuiltForm.depart_status" placeholder="请选择部门状态">
-              <el-option label="启用" value="shanghai"></el-option>
-              <el-option label="停用" value="beijing"></el-option>
-            </el-select>
+          <el-form-item label="部门名称：" :label-width="formLabelWidth" prop="departName">
+            <el-input v-model="NewBuiltForm.departName" autocomplete="off" maxlength="50" show-word-limit></el-input>
           </el-form-item>
-          <el-form-item label="部门编码" :label-width="formLabelWidth" prop="depart_code">
-            <el-input v-model="NewBuiltForm.depart_code" autocomplete="off" maxlength="10" show-word-limit></el-input>
+          <el-form-item label="部门编码：" :label-width="formLabelWidth" prop="departCode">
+            <el-input v-model="NewBuiltForm.departCode" autocomplete="off" maxlength="20" show-word-limit></el-input>
           </el-form-item>
-          <el-form-item label="部门介绍" :label-width="formLabelWidth" prop="depart_introduce">
-            <el-input type="textarea" v-model="NewBuiltForm.depart_introduce " autocomplete="off" :autosize="{ minRows: 3, maxRows:14}"
+          <el-form-item label="部门介绍：" :label-width="formLabelWidth" prop="departIntroduce">
+            <el-input type="textarea" v-model="NewBuiltForm.departIntroduce" autocomplete="off" :autosize="{ minRows: 3, maxRows:14}"
                       maxlength="50" show-word-limit>
             </el-input>
           </el-form-item>
-          <el-form-item label="部门备注" :label-width="formLabelWidth" prop="depart_remark">
-            <el-input v-model="NewBuiltForm.depart_remark " autocomplete="off" maxlength="10" show-word-limit></el-input>
+          <el-form-item label="部门备注：" :label-width="formLabelWidth" prop="departRemark">
+            <el-input v-model="NewBuiltForm.departRemark " autocomplete="off" maxlength="50" show-word-limit></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -117,83 +87,82 @@
           <el-button type="primary" @click="submitForm('NewBuiltForm')">确 定</el-button>
         </div>
       </el-dialog>
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" ></el-tree>
+        <el-tree :data="tableDatas" :props="defaultProps" @node-click="handleNodeClick" ></el-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="NewDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="chooseDepart()">确 定</el-button>
       </div>
     </el-dialog>
+    <!--修改机构-->
+    <el-dialog
+      title="修改机构"
+      :visible.sync="dialogModify"
+      width="30%"
+      :close-on-click-modal="clickClose">
+      <el-form :model="ModifyBuiltForm" :rules="rules" ref="ModifyBuiltForm">
+        <el-form-item label="部门代码：" :label-width="formLabelWidth">
+         <span>{{ departCode}}</span>
+        </el-form-item>
+        <el-form-item label="部门名称：" :label-width="formLabelWidth" prop="departName">
+          <el-input v-model="ModifyBuiltForm.departName" autocomplete="off" maxlength="10" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="部门介绍：" :label-width="formLabelWidth" prop="departIntroduce">
+          <el-input type="textarea" v-model="ModifyBuiltForm.departIntroduce " autocomplete="off" :autosize="{ minRows: 3, maxRows:14}"
+                    maxlength="50" show-word-limit>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="部门备注：" :label-width="formLabelWidth" prop="departRemark">
+          <el-input v-model="ModifyBuiltForm.departRemark " autocomplete="off" maxlength="10" show-word-limit></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogModify = false">取 消</el-button>
+      <el-button type="primary" @click="ModifyForm('ModifyBuiltForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
-
 </template>
 
 <script>
-  import ObVue from '../../../components/common/ob_vue'
   export default {
     name: 'institution',
     data: function () {
       return {
         NewDialogVisible: false,
         innerVisible: false,
-        QueryInstitution: '',
+        dialogModify: false,
+        clickClose: false,
+        lockScroll: false,
         parentId: '',
         pathTxt: '',
+        finalpathTxt: '',
+        departName: '',
+        departId: '',
+        departCode: '',
+        isShow: false,
         NewBuiltForm: {
-          depart_name: '',
-          depart_status: '',
-          depart_code: '',
-          depart_introduce: '',
-          depart_remark: ''
+          departName: '',
+          departIntroduce: '',
+          departRemark: '',
+          departCode: ''
+        },
+        ModifyBuiltForm: {
+          departName: '',
+          departIntroduce: '',
+          departRemark: ''
         },
         selectAmount: [],
         formLabelWidth: '120px',
         // 校验规则
         rules: {
-          depart_name: [
+          departName: [
             {required: true, message: '请输入部门名称', trigger: 'change'}
           ],
-          depart_status: [
-            {required: true, message: '请选择部门状态', trigger: 'change'}
-          ],
-          depart_code: [
+          departCode: [
             {required: true, message: '请输入部门编码', trigger: 'change'}
-          ],
-          depart_introduce: [
-            {required: true, message: '请输入部门介绍', trigger: 'change'}
-          ],
-          depart_remark: [
-            {required: true, message: '请输入部门备注', trigger: 'change'}
           ]
         },
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
+        tableDatas: [],
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -223,88 +192,123 @@
         },
         value1: '',
         value2: '',
-        data: [{
-          label: '菲蒂科',
-          id: '000',
-          children: [{
-            label: '研发部',
-            id: '001',
-            children: [{
-              label: '第一研发小组',
-              id: '011',
-              path: '研发部,第一研发小组'
-            }]
-          }]
-        }, {
-          label: '华东电气',
-          id: '111',
-          children: [{
-            label: '工程部',
-            id: '110',
-            path: '华东电气,工程部 ',
-            children: [{
-              label: '施工一组',
-              id: '100'
-            }]
-          }, {
-            label: '销售部',
-            id: '222',
-            children: [{
-              label: '销售一组',
-              id: '220'
-            }]
-          }]
-        }],
         defaultProps: {
           children: 'children',
-          label: 'label'
+          label: 'departName'
         }
       }
     },
     methods: {
       // 删除组织机构
       departDelete (index, row) {
-          console.log(index)
         console.log(row)
+        let params = {}
+        let param = {}
+        params.departId = row.departId
+        param.params = params
+        if (row.children.length === 0) {
+          this.$confirm('确认删除?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$store.dispatch('ajaxDelete', {url: '/supplierUrl/v1/supplier/department',
+              submitData: param,
+              success: res => {
+                if (res.status === 'OK') {
+                  this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+                  })
+                  // 刷新列表
+                  this.getListData()
+                } else {
+                  this.$message.error('删除失败')
+                }
+              }})
+          }).catch(() => {
+          })
+        } else {
+          this.$message({
+            showClose: true,
+            message: '该部门下有子部门不可直接删除！',
+            type: 'warning'
+          })
+        }
+      },
+      // 修改组织机构
+      departModify (index, row) {
+        this.dialogModify = true
+        this.departId = row.departId
+        this.departCode = row.departCode
+        this.ModifyBuiltForm.departName = row.departName
+        this.ModifyBuiltForm.departIntroduce = row.departIntroduce
+        this.ModifyBuiltForm.departRemark = row.departRemark
+      },
+      // 确认修改机构
+      ModifyForm (ModifyBuiltForm) {
+        this.$refs[ModifyBuiltForm].validate((valid) => {
+          if (valid) {
+            this.ModifyBuiltForm.departId = this.departId
+            console.log(JSON.stringify(this.ModifyBuiltForm))
+            this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/department',
+              submitData: this.ModifyBuiltForm,
+              success: res => {
+                console.log(res)
+                if (res.status === 'OK') {
+                  this.$message({
+                    message: '修改成功！',
+                    type: 'success'
+                  })
+                  this.dialogModify = false
+                  // 重新加载列表数据
+                  this.getListData()
+                } else {
+                  this.$message.error(res.message)
+                }
+              }})
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       chooseDepart () {
-          if (this.parentId === null || this.parentId === '') {
-            ObVue.$message({
-              showClose: true,
-              message: '请选择一个父级部门！',
-              type: 'warning'
-            })
-          } else {
-            this.innerVisible = true
-          }
+        this.innerVisible = true
       },
+      // 点击tree事件
       handleNodeClick (data) {
-        console.log(data.path)
-        this.pathTxt = data.path
-        this.parentId = data.id
+        if (data.pathTxt === null) {
+          this.finalpathTxt = data.departName
+        }
+        this.finalpathTxt = ',' + data.departName
+        this.parentId = data.parentId
+        this.departName = data.departName
+        this.departId = data.departId
+        this.isShow = true
       },
-      // currentClick (data, node) {
-      //   console.log(data)
-      //   console.log(node)
-      // },
+
+      // 确认新增机构
       submitForm (NewBuiltForm) {
         this.$refs[NewBuiltForm].validate((valid) => {
             if (valid) {
-              console.log('aa' + this.parentId)
               this.NewDialogVisible = false
-              this.NewBuiltForm.parentId = this.parentId
-              this.NewBuiltForm.pathTxt = this.pathTxt
-              console.log(JSON.toString(this.NewBuiltForm))
-              this.$store.dispatch('ajax', {url: '/supplierUrl/v1/supplier/info',
+              this.NewBuiltForm.parentId = this.departId
+              this.NewBuiltForm.pathTxt = this.finalpathTxt
+              console.log(JSON.stringify(this.NewBuiltForm))
+              this.$store.dispatch('ajaxPost', {url: '/supplierUrl/v1/supplier/department',
                 submitData: this.NewBuiltForm,
-                success: function (res) {
+                success: res => {
+                  console.log(res.status)
                   if (res.status === 'OK') {
                     this.$message({
                       message: '添加成功！',
                       type: 'success'
                     })
+                    this.innerVisible = false
+                    this.getListData()
                   } else {
-                    ObVue.$message.error('添加失败')
+                    this.$message.error(res.message)
                   }
                 }})
             } else {
@@ -313,35 +317,42 @@
             }
         })
       },
+      // 清空新建组织机构数据
+      innerDialogClose (NewBuiltForm) {
+        this.$refs[NewBuiltForm].resetFields()
+        this.departName = ''
+        this.departId = ''
+        this.isShow = false
+      },
       selectAll: function (val) {
         this.selectAmount = val
       },
       handleSelectionChange (val) {
         this.selectAmount = val
       },
-      Delete: function (amount) {
-        if (amount.length === 0) {
-          ObVue.$message.error('请至少选择一条数据')
-        } else {
-          console.log(amount)
-        }
-      }
+      // 请求列表数据
+      getListData: function () {
+        this.$store.dispatch('ajaxGet', {url: '/supplierUrl/v1/supplier/department',
+          success: res => {
+            if (res.status === 'OK') {
+              this.tableDatas = res.data
+              console.log(this.tableDatas)
+            } else if (res.status !== 'OK') {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+            }
+          }
+        })
+  }
   },
     created () {
-    // 请求列表数据
-    this.$store.dispatch('ajaxGet', {url: '/supplierUrl/v1/supplier/department',
-      success: function (res) {
-        console.log(res.data.length)
-        for (let i = 0; i < res.data.length; i++) {
-          console.log(i)
-        }
-      for (let prop in res.data) {
-          console.log(prop)
-      }
-      console.log(res.data)
-      }})
+      this.getListData()
   }
+
   }
+
 </script>
 
 <style scoped lang="scss">
@@ -352,8 +363,20 @@
   margin-top: 15px;
   background-color: #fff;
 }
-.visiable {
-  display: none;
+.el-table_1_column_2 {
+  .IsShow {
+    display: none;
+  }
+}
+.el-dialog__body {
+  height: 150px;
+}
+.el-tree {
+  overflow-y: scroll;
+  height: 200px;
+  border-top: 1px solid #EBEEF5;
+  border-left: 1px solid #EBEEF5;
+  border-bottom: 1px solid #EBEEF5;
 }
 .table-style {
   margin-top: 20px;
