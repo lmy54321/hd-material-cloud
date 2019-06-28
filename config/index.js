@@ -13,7 +13,7 @@ module.exports = {
    //  proxyTable: {},
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '192.168.1.152', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -25,18 +25,33 @@ module.exports = {
       '/api':'http://localhost:3000/',
       // 供应商申请
       '/supplierUrl': {
-        target: 'http://192.168.1.102:7050', //源地址
+        target: 'http://192.168.1.102:7001/supplier', //源地址
         changeOrigin: true, //是否跨域
         pathRewrite: {
           '^/supplierUrl': '' //路径重写
         }
       },
+      // 资源服务模块
+      '/resourceUrl': {
+        target: 'http://192.168.1.102:7001/resource', //源地址
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/resourceUrl': '' //路径重写
+        }
+      },
       // 用户登录
       '/LoginUrl': {
-        target: 'http://192.168.1.102:7010', //源地址
+        target: 'http://192.168.1.102:7001/user', //源地址
         changeOrigin: true, //是否跨域
         pathRewrite: {
           '^/LoginUrl': '' //路径重写
+        }
+      },
+      '/tenderingUrl': {
+        target: 'http://192.168.1.102:7001/tendering', //源地址
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/tenderingUrl': '' //路径重写
         }
       }
     },

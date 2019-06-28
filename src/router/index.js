@@ -34,6 +34,11 @@ export default new Router({
           meta: { title: '组织机构' }
         },
         {
+          path: '/invitation',
+          component: resolve => require(['../views/supplier/invitation/invitation'], resolve),
+          meta: { title: '邀请函列表' }
+        },
+        {
           path: '/roleinfo',
           component: resolve => require(['../views/supplier/roleinfo/roleinfo'], resolve),
           meta: { title: '角色信息' }
@@ -42,6 +47,11 @@ export default new Router({
           path: '/PositionManagement',
             component: resolve => require(['../views/supplier/PositionManagement/PositionManagement'], resolve),
           meta: { title: '职位管理' }
+        },
+        {
+          path: '/resourceManagement',
+          component: resolve => require(['../views/supplier/resourceManagement/resourceManagement'], resolve),
+          meta: { title: '资源管理' }
         },
         {
           path: '/PeopleManagement',
@@ -60,12 +70,12 @@ export default new Router({
         },
         {
           path: '/bid_bond_payment_certificate',
-          component: resolve => require(['../views/supplier/bond_payment_upload/bid_bond_payment_certificate'], resolve),
+          component: resolve => require(['../views/supplier/bondPaymentManagement/bidBondPayment'], resolve),
           meta: { title: '投标保证金上传' }
         },
         {
           path: '/performance_bond_payment_certificate',
-          component: resolve => require(['../views/supplier/bond_payment_upload/performance_bond_payment_certificate'], resolve),
+          component: resolve => require(['../views/supplier/bondPaymentManagement/performanceBondPayment'], resolve),
           meta: { title: '履约保证金上传' }
         },
         {
