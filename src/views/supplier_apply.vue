@@ -316,7 +316,7 @@
             this.ruleForm.countyName = sessionStorage.getItem('countyName')
             this.ruleForm.industryName = sessionStorage.getItem('industryName')
             this.ruleForm.industryId = '003'
-            this.$store.dispatch('ajax', {url: '/supplierUrl/v1/supplier/info',
+            this.$store.dispatch('ajaxPost', {url: '/supplierUrl/v1/supplier/req',
               submitData: this.ruleForm,
               success: function (res) {
                 if (res.status === 'OK') {

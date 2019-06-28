@@ -83,13 +83,9 @@
                 <el-col :span="24" >
                   <span class="item-title">供应商资质：</span>
                   <div class="qualifications-div">
-                    <div v-for="item in imgUrls" :key="item">
-                      <el-image :src=item class="qualifications-img" >
-                        <div slot="error" class="image-slot">
-                          <i class="el-icon-picture-outline"></i>
-                        </div>
-                      </el-image>
-                    </div>
+                      <viewer :images="imgUrls">
+                       <img :src=item  v-for="item in imgUrls" :key="item" class="qualifications-img">
+                      </viewer>
                   </div>
                 </el-col>
               </el-row>
@@ -108,8 +104,7 @@
     data: function () {
       return {
         imgUrls: ['https://p0.meituan.net/750.0.0/dnaimgdark/a332ce5096c91663031d97188fef67211453781.jpg',
-          'https://p0.meituan.net/750.0.0/dnaimgdark/a332ce5096c91663031d97188fef67211453781.jpg',
-          'https://p0.meituan.net/750.0.0/dnaimgdark/a332ce5096c91663031d97188fef67211453781.jpg' ],
+          'https://p0.meituan.net/750.0.0/dnaimgdark/10122c01fc1d90f58dfcdef0a806c7d9201806.jpg' ],
         value: 4.5
       }
     }

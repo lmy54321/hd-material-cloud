@@ -72,16 +72,16 @@
                 ref="upload"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload"
+                :on-preview="logoPictureCardPreview"
+                :on-remove="logoRemove"
+                :before-upload="beforelogoUpload"
                 :multiple="true"
                 :auto-upload="false"
                 :limit=10>
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible" size="tiny">
-                <img width="100%" :src="dialogImageUrl" alt="">
+              <el-dialog :visible.sync="logoVisible" size="tiny">
+                <img width="100%" :src="logoImageUrl" alt="">
               </el-dialog>
             </div>
           </el-col>
@@ -96,16 +96,16 @@
                 ref="upload"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload"
+                :on-preview="carouselPictureCardPreview"
+                :on-remove="carouselRemove"
+                :before-upload="beforecarouselUpload"
                 :multiple="true"
                 :auto-upload="false"
                 :limit=10>
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible" size="tiny">
-                <img width="100%" :src="dialogImageUrl" alt="">
+              <el-dialog :visible.sync="carouselVisible" size="tiny">
+                <img width="100%" :src="carouselImageUrl" alt="">
               </el-dialog>
             </div>
           </el-col>
@@ -117,11 +117,63 @@
 
 <script>
   export default {
-    name: 'supplierinfomodify'
+    name: 'supplierinfomodify',
+     data () {
+      return {
+        logoVisible: false,
+        logoImageUrl: '',
+        carouselVisible: false,
+        carouselImageUrl: ''
+      }
+    },
+    methods: {
+      // logo图片处理carousel
+      logoRemove (file, fileList) {
+        console.log(file, fileList)
+      },
+      logoPictureCardPreview (file) {
+        this.logoImageUrl = file.url
+        this.logoVisible = true
+      },
+      // 判断图片是否大于2M
+      beforelogoUpload (file) {
+        // const isJPG = file.type === 'image/jpeg'
+        const isLt2M = file.size / 1024 / 1024 < 2
+        // if (!isJPG) {
+        //   this.$message.error('上传头像图片只能是 JPG 格式!')
+        // }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!')
+        }
+        return isLt2M
+        // return isJPG && isLt2M
+      },
+      // carousel图片处理
+      carouselRemove (file, fileList) {
+        console.log(file, fileList)
+      },
+      carouselPictureCardPreview (file) {
+        this.carouselImageUrl = file.url
+        this.carouselVisible = true
+      },
+      // 判断图片是否大于2M
+      beforecarouselUpload (file) {
+        // const isJPG = file.type === 'image/jpeg'
+        const isLt2M = file.size / 1024 / 1024 < 2
+        // if (!isJPG) {
+        //   this.$message.error('上传头像图片只能是 JPG 格式!')
+        // }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!')
+        }
+        return isLt2M
+        // return isJPG && isLt2M
+      }
+    }
   }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
   .el-header{
     color: #333;
     font-size: 20px;
@@ -139,6 +191,10 @@
       width: 70px;
       height: 70px;
       line-height: 80px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item {
+      width: 70px;
+      height: 70px;
     }
   }
 </style>

@@ -50,17 +50,27 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          localStorage.setItem('ms_username', this.ruleForm.account)
-          // this.$store.dispatch('ajax', {url: 'LoginUrl/v1/user/login',
-          //   submitData: this.ruleForm,
-          //   success: function (res) {
-          //     if (res.status === 'OK') {
-          //       this.$router.push('/')
-          //     } else {
-          //       ObVue.$message.error('请输入正确的账号名或密码')
-          //     }
-          //   }})
-          this.$router.push('/')
+          this.$store.dispatch('ajaxPost', {url: 'LoginUrl/v1/user/login',
+            submitData: this.ruleForm,
+            success: res => {
+              if (res.status === 'OK') {
+                this.$message({
+                  message: '登录成功！',
+                  type: 'success'
+                })
+                localStorage.setItem('ms_username', this.ruleForm.account)
+                localStorage.setItem('token', res.data.token)
+                console.log(res.data.token)
+                // 请求左侧导航菜单数据
+                this.$store.dispatch('ajaxGet', {url: '/api/items',
+                  success: res => {
+                    this.$router.push('/')
+                  }})
+              } else {
+                this.$message.error(res.message)
+              }
+            }})
+          // this.$router.push('/')
         } else {
           console.log('error submit!!')
           return false

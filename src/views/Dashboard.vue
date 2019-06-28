@@ -1,16 +1,23 @@
 <template>
     <div class="message">
-    <div class="msg"></div>
-      <div class="msg1"></div>
+      <div class="msg">
+        <span class="iconfont icon-qian"></span>
+      </div>
+      <div class="msg1">
+        <span class="iconfont icon-biaoqian"></span>
+      </div>
       <div class="msg2"></div>
-      <router-link to='/supplier_apply'><a>供应商申请</a></router-link>
+      <!--<router-link to='/supplier_apply'><a>供应商申请</a></router-link>-->
     </div>
 
 </template>
 
 <script>
 export default {
-  name: 'dashboard'
+  name: 'dashboard',
+  created () {
+
+  }
 }
 </script>
 
@@ -20,23 +27,28 @@ export default {
     display: flex;
     width: auto;
     height: auto;
-
     padding: 5px auto;
     .msg {
       width: 100px;
       height: 50px;
-      background: #00d1b2;
+      background: #fff;
+      display: flex;
+      .iconfont {
+        font-size: 35px;
+        margin-top: 5px;
+        margin-left: 5px;
+      }
     }
     .msg1 {
       width: 100px;
       height: 50px;
-      background: #0000ff;
+      background: #fff;
       margin-left: 5px;
     }
     .msg2 {
       width: 100px;
       height: 50px;
-      background: #ebb563;
+      background: #fff;
       margin-left: 5px;
     }
   }

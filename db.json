@@ -15,12 +15,20 @@
           "title": "我的投标"
         },
         {
+          "index": "invitation",
+          "title": "邀请函列表"
+        },
+        {
           "index": "institution",
           "title": "组织机构"
         },
         {
           "index": "roleinfo",
           "title": "角色信息"
+        },
+        {
+          "index": "resourceManagement",
+          "title": "资源管理"
         },
         {
           "index": "PositionManagement",
@@ -46,15 +54,15 @@
         },
         {
           "index": "bond_payment_certificate",
-          "title": "保证金缴纳凭证上传",
+          "title": "保证金缴纳管理",
           "subs": [
             {
               "index": "bid_bond_payment_certificate",
-              "title": "投标保证金缴纳上传"
+              "title": "投标保证金缴纳"
             },
             {
               "index": "performance_bond_payment_certificate",
-              "title": "履约保证金缴纳上传"
+              "title": "履约保证金缴纳"
             }
           ]
         }

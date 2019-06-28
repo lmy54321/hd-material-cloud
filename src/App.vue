@@ -9,7 +9,7 @@
 export default {
   created () {
     // 请求左侧导航菜单数据
-    this.$store.dispatch('ajax', {url: '/api/items',
+    this.$store.dispatch('ajaxGet', {url: '/api/items',
       success: function (res) {
       }})
   }

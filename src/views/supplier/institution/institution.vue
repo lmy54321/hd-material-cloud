@@ -131,7 +131,7 @@
         NewDialogVisible: false,
         innerVisible: false,
         dialogModify: false,
-        clickClose: false,
+        clickClose: false, // 点击modal时 不关闭对话框
         lockScroll: false,
         parentId: '',
         pathTxt: '',
