@@ -223,7 +223,7 @@
                   // 刷新列表
                   this.getListData()
                 } else {
-                  this.$message.error('删除失败')
+                  this.$message.error(res.message)
                 }
               }})
           }).catch(() => {

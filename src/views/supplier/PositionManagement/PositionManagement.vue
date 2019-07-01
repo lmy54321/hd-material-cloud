@@ -4,7 +4,8 @@
 <template>
   <div style="width: 100%">
     <el-row type="flex">
-      <el-col :span="5" style="margin-top: 15px;display: flex">
+      <el-col :span="7" style="margin-top: 15px;display: flex">
+        <span style="width:380px">职位信息查询：</span>
         <el-input placeholder="请输职位名称" v-model="QueryJob" >
         </el-input>
         <el-input placeholder="请输部门名称" v-model="Querypart" style="margin-left: 5px">
