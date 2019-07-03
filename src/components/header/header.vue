@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     username () {
-      let username = localStorage.getItem('ms_username')
+      let username = sessionStorage.getItem('ms_username')
       return username || this.name
     }
   },
@@ -63,7 +63,7 @@ export default {
     handleCommand (command) {
       if (command === 'loginout') {
         localStorage.removeItem('ms_username')
-        localStorage.removeItem('token')
+        sessionStorage.removeItem('token')
         this.$router.push('/login')
       }
     },

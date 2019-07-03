@@ -29,6 +29,7 @@
 
 <script>
  // import ObVue from '../components/common/ob_vue'
+ import axios from 'axios'
 export default {
   data: function () {
     return {
@@ -50,27 +51,28 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('ajaxPost', {url: 'LoginUrl/v1/user/login',
-            submitData: this.ruleForm,
-            success: res => {
-              if (res.status === 'OK') {
-                this.$message({
-                  message: '登录成功！',
-                  type: 'success'
-                })
-                localStorage.setItem('ms_username', this.ruleForm.account)
-                localStorage.setItem('token', res.data.token)
-                console.log(res.data.token)
-                // 请求左侧导航菜单数据
-                this.$store.dispatch('ajaxGet', {url: '/api/items',
-                  success: res => {
-                    this.$router.push('/')
-                  }})
-              } else {
-                this.$message.error(res.message)
-              }
-            }})
-          // this.$router.push('/')
+          axios({
+            method: 'post',
+            url: '/LoginUrl/v1/user/login',
+            data: this.ruleForm
+          }).then(res => {
+            console.log(res)
+            if (res.data.status === 'OK') {
+              this.$message({
+                message: '登录成功！',
+                type: 'success'
+              })
+              console.log('请求前')
+              sessionStorage.setItem('ms_username', this.ruleForm.account)
+              console.log(res.data.data)
+              sessionStorage.setItem('token', res.data.data.token)
+              this.$router.push('/')
+            } else {
+              this.$message.error(res.data.message)
+            }
+          }).catch(function (error) {
+              console.log(error)
+            })
         } else {
           console.log('error submit!!')
           return false

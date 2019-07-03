@@ -6,7 +6,7 @@
     <el-row type="flex">
       <el-col :span="7" style="margin-top: 15px;display: flex;align-items: center">
         <span style="width:400px">人员信息查询：</span>
-        <el-input placeholder="请输入姓名" v-model="queryUserName">
+        <el-input placeholder="请输入手机号" v-model="queryPhoneNumber">
         </el-input>
         <el-input placeholder="请输入账号" v-model="queryAccountName" style="margin-left: 5px"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="userQuery()" style="margin-left: 5px"></el-button>
@@ -27,10 +27,6 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="userName"
-            label="姓名">
-          </el-table-column>
-          <el-table-column
             prop="accountName"
             label="账号">
           </el-table-column>
@@ -41,7 +37,12 @@
           <el-table-column
             prop="userSex"
             label="性别"
-            width="100">
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="phoneNumber"
+            label="手机号"
+            width="130">
           </el-table-column>
           <el-table-column
             prop="jobName"
@@ -51,7 +52,7 @@
           <el-table-column
             prop="createTime"
             label="创建时间"
-            width="150">
+            width="180">
           </el-table-column>
           <el-table-column
             label="操作"
@@ -90,7 +91,7 @@
     </el-row>
     <!--新建操作人员-->
     <el-dialog title="新建操作人员" :visible.sync="NewDialogVisible"  width="40%" @close="newDialogClose('NewBuiltForm')"
-               :close-on-click-modal="clickClose">
+               :close-on-click-modal="clickClose" top="7vh" lock-scroll>
       <div class="dialog-bag">
         <!--分配角色-->
         <el-dialog
@@ -220,7 +221,7 @@
           <el-input v-model="NewBuiltForm.accountName" autocomplete="off" maxlength="10" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth" prop="accountPwd">
-          <el-input v-model="NewBuiltForm.accountPwd" show-password autocomplete="off" maxlength="10" show-word-limit></el-input>
+          <el-input v-model="NewBuiltForm.accountPwd" show-password autocomplete="off" maxlength="12" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phoneNumber">
           <el-input v-model="NewBuiltForm.phoneNumber" autocomplete="off" maxlength="11" show-word-limit></el-input>
@@ -286,13 +287,13 @@
     <el-dialog title="修改账号密码" :visible.sync="ModifyDialogVisible"  :close-on-click-modal="clickClose" width="30%">
       <el-form :model="ModifyForm" :rules="rules" ref="ModifyForm">
         <el-form-item label="原密码" :label-width="formLabelWidth" prop="oldAccountPwd">
-          <el-input v-model="ModifyForm.oldAccountPwd " show-password autocomplete="off" maxlength="10" show-word-limit></el-input>
+          <el-input v-model="ModifyForm.oldAccountPwd " show-password autocomplete="off" maxlength="12" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="新密码" :label-width="formLabelWidth" prop="accountPwd">
-        <el-input v-model="ModifyForm.accountPwd " show-password autocomplete="off" maxlength="10" show-word-limit></el-input>
+        <el-input v-model="ModifyForm.accountPwd " show-password autocomplete="off" maxlength="12" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="确认密码" :label-width="formLabelWidth" prop="surePwd">
-        <el-input v-model="surePwd " type="password" autocomplete="off" maxlength="10" show-word-limit></el-input>
+        <el-input v-model="ModifyForm.surePwd " type="password" autocomplete="off" maxlength="12" show-word-limit></el-input>
       </el-form-item>
 
     </el-form>
@@ -303,7 +304,7 @@
     </el-dialog>
 
     <!--修改用户详情-->
-    <el-dialog title="修改用户详情" :visible.sync="ModifyDialogUser"  :close-on-click-modal="clickClose" width="50%"  @close="modifyDialogClose()">
+    <el-dialog title="修改用户详情" :visible.sync="ModifyDialogUser"  :close-on-click-modal="clickClose" width="40%" top="7vh" @close="modifyDialogClose()">
       <div class="dialog-bag">
         <!--修改用户信息填写表单-->
       <el-form :model="ModifyUserForm" :rules="rules" ref="ModifyUserForm">
@@ -535,9 +536,8 @@
         jobModifycurrentPage: 1, // 修改用户详情---职位页码
         jobModifypageSize: 10, // 修改用户详情---职位页数
         jobModifyTotal: 0, // 修改用户详情---总职位数
-        queryUserName: '', // 按人员名称查询
+        queryPhoneNumber: '', // 按人员名称查询
         queryAccountName: '', // 按人员账号查询
-        surePwd: '',
         dialogImageUrl: '',
         tagroleId: '',
         roleNames: [], // 分配的角色名称数组
@@ -545,6 +545,7 @@
         selectAmount: '',
         roleModifyNames: [], // 修改人员信息分配的角色数组
         jobModifyName: [], // 修改用户详情 分配的职位数组
+        jobmodfyName: '', // 修改用户详情 选择的职位名称
         userId: '', // 修改用户详情 传给后台的uerid
         NewBuiltForm: {
           accountName: '',
@@ -560,7 +561,8 @@
         },
         ModifyForm: {
           oldAccountPwd: '',
-          accountPwd: ''
+          accountPwd: '',
+          surePwd: ''
         },
         ModifyUserForm: {
           nickName: '',
@@ -585,15 +587,19 @@
         rules: {
           accountName: [
             {required: true, message: '请输入账号', trigger: 'change'},
-            {min: 8, max: 18, message: '长度在 8 到 18 个字符', trigger: 'blur'}
+            {min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur'}
           ],
           accountPwd: [
             {required: true, message: '请输入密码', trigger: 'change'},
-            {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+            {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur'}
           ],
           oldAccountPwd: [
             {required: true, message: '请输入密码', trigger: 'change'},
-            {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+            {min: 6, max: 18, message: '长度在 6 到 12 个字符', trigger: 'blur'}
+          ],
+          surePwd: [
+            {required: true, message: '请输入密码', trigger: 'change'},
+            {min: 6, max: 18, message: '长度在 6 到 12 个字符', trigger: 'blur'}
           ],
           phoneNumber: [
             {required: true, message: '手机号不能为空', trigger: 'change'},
@@ -709,7 +715,7 @@
                 // 重新加载列表数据
                 this.getListData(this.currentPage, this.pageSize)
               } else {
-                this.$message.error('删除失败')
+                this.$message.error(res.message)
               }
             }})
         }).catch(() => {
@@ -754,22 +760,29 @@
                 type: 'info'
               })
             } else {
-              this.ModifyForm.userId = this.userId
-              this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/user/pwd',
-                submitData: this.ModifyForm,
-                success: res => {
-                  if (res.status === 'OK') {
-                    this.$message({
-                      message: '修改成功！',
-                      type: 'success'
-                    })
-                    this.ModifyDialogVisible = false
-                    // 重新加载列表数据
-                    this.getListData(this.currentPage, this.pageSize)
-                  } else {
-                    this.$message.error(res.message)
-                  }
-                }})
+              this.$confirm('确认修改?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.ModifyForm.userId = this.userId
+                this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/user/pwd',
+                  submitData: this.ModifyForm,
+                  success: res => {
+                    if (res.status === 'OK') {
+                      this.$message({
+                        message: '修改成功！',
+                        type: 'success'
+                      })
+                      this.ModifyDialogVisible = false
+                      // 重新加载列表数据
+                      this.getListData(this.currentPage, this.pageSize)
+                    } else {
+                      this.$message.error(res.message)
+                    }
+                  }})
+              }).catch(() => {
+              })
             }
           } else {
             console.log('error submit!!')
@@ -896,6 +909,7 @@
       },
       // 修改用户详情---确认添加职位
       jobModifSubmit () {
+        this.jobModifyName.push(this.jobmodfyName)
         this.addModifyJobDialog = false
         this.$refs.multiplerJobModifyTable.clearSelection() // 清空之前的选中状态
       },
@@ -933,7 +947,7 @@
       // 修改用户详情---选择的职位
       jobModifySelect (val) {
         this.ModifyUserForm.jobId = val.jobId
-        this.jobModifyName.push(val.jobName)
+        this.jobmodfyName = val.jobName
       },
       // 修改用户详情---删除职位
       jobModifyClose (tag) {
@@ -970,7 +984,7 @@
                 this.ModifyUserForm.userCardNo = res.data.userCardNo
                 this.ModifyUserForm.phoneNumber = res.data.phoneNumber
                 this.ModifyUserForm.mailbox = res.data.mailbox
-               this.ModifyUserForm.jobId = (res.data.jobId)
+                this.ModifyUserForm.jobId = (res.data.jobId)
                 this.jobModifyName.push(res.data.jobName)
             } else {
               this.$message({
@@ -984,29 +998,48 @@
       },
       // 确认修改用户详情
       ModifyUserInfo (ModifyUserForm) {
-        this.$refs[ModifyUserForm].validate((valid) => {
-          if (valid) {
-              this.ModifyUserForm.userId = this.userId
-              this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/user',
-                submitData: this.ModifyUserForm,
-                success: res => {
-                  if (res.status === 'OK') {
-                    this.$message({
-                      message: '修改成功！',
-                      type: 'success'
-                    })
-                    this.ModifyDialogUser = false
-                    // 重新加载列表数据
-                    this.getListData(this.currentPage, this.pageSize)
-                  } else {
-                    this.$message.error(res.message)
-                  }
-                }})
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
+          this.$refs[ModifyUserForm].validate((valid) => {
+            if (valid) {
+              if (this.ModifyUserForm.roleIds.length === 0) {
+                this.$message({
+                  message: '请至少分配一个角色！',
+                  type: 'error'
+                })
+              } else if (this.ModifyUserForm.jobId === '') {
+                this.$message({
+                  message: '请至少分配一个职位！',
+                  type: 'error'
+                })
+              } else {
+                this.$confirm('确认修改?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.ModifyUserForm.userId = this.userId
+                  this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/user',
+                    submitData: this.ModifyUserForm,
+                    success: res => {
+                      if (res.status === 'OK') {
+                        this.$message({
+                          message: '修改成功！',
+                          type: 'success'
+                        })
+                        this.ModifyDialogUser = false
+                        // 重新加载列表数据
+                        this.getListData(this.currentPage, this.pageSize)
+                      } else {
+                        this.$message.error(res.message)
+                      }
+                    }})
+                }).catch(() => {
+                })
+              }
+            } else {
+              console.log('error submit!!')
+              return false
+            }
+          })
       },
       //  修改用户详情---清空角色和职位数组
       modifyDialogClose () {
@@ -1015,6 +1048,10 @@
         this.roleModifyListTemp = []
         this.roleModifyNames = []
         this.jobModifyName = []
+        this.roleModifycurrentPage = 1
+        this.roleModifypageSize = 10
+        this.jobModifycurrentPage = 1
+        this.jobModifypageSize = 10
       },
       // 添加角色
       roleAdd () {
@@ -1230,7 +1267,7 @@
         params.currentPage = this.currentPage
         params.pageSize = this.pageSize
         params.accountName = this.queryAccountName
-        params.userName = this.queryUserName
+        params.phoneNumber = this.queryPhoneNumber
         param.params = params
         this.$store.dispatch('ajaxGet', {url: '/supplierUrl/v1/supplier/user',
           submitData: param,

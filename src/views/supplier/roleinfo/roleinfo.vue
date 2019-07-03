@@ -275,6 +275,7 @@
                       message: '新增成功！',
                       type: 'success'
                     })
+                    this.NewDialogVisible = false
                     // 重新加载列表数据
                     this.GetlistData(this.currentPage, this.pageSize)
                   } else {
@@ -334,28 +335,35 @@
       },
       // 确认修改角色
       ModifySubmit (ModifyForm) {
-        this.$refs[ModifyForm].validate((valid) => {
-          this.ModifyForm.roleId = this.roleId
-          if (valid) {
-            this.$store.dispatch('ajaxPatch', {url: '/resourceUrl/v1/resource/role',
-              submitData: this.ModifyForm,
-              success: res => {
-                if (res.status === 'OK') {
-                  this.$message({
-                    message: '修改成功！',
-                    type: 'success'
-                  })
-                  this.ModifyDialogVisible = false
-                  // 重新加载列表数据
-                  this.GetlistData(this.currentPage, this.pageSize)
-                } else {
-                  this.$message.error(res.message)
-                }
-              }})
-          } else {
-            console.log('error submit!!')
-            return false
-          }
+        this.$confirm('确认修改?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$refs[ModifyForm].validate((valid) => {
+            this.ModifyForm.roleId = this.roleId
+            if (valid) {
+              this.$store.dispatch('ajaxPatch', {url: '/resourceUrl/v1/resource/role',
+                submitData: this.ModifyForm,
+                success: res => {
+                  if (res.status === 'OK') {
+                    this.$message({
+                      message: '修改成功！',
+                      type: 'success'
+                    })
+                    this.ModifyDialogVisible = false
+                    // 重新加载列表数据
+                    this.GetlistData(this.currentPage, this.pageSize)
+                  } else {
+                    this.$message.error(res.message)
+                  }
+                }})
+            } else {
+              console.log('error submit!!')
+              return false
+            }
+          })
+        }).catch(() => {
         })
       },
       // 清空新建角色表单
@@ -379,7 +387,7 @@
               this.JurisdictionListData = res.data.tree
               this.defaultChecked = res.data.resIds
             } else {
-              this.$message.error(res.message)
+              this.$message.error(res.data.message)
             }
           }
         })

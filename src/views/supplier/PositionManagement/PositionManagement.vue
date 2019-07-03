@@ -182,38 +182,11 @@
         rules: {
           jobName: [
             {required: true, message: '请输入职位名称', trigger: 'change'},
-            {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
+            {min: 2, max: 20, message: '长度在 2 到 20个字符', trigger: 'blur'}
           ]
         },
         tableDatas: [],
         DepartDatas: [],
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
         value1: '',
         value2: '',
         defaultProps: {
@@ -313,30 +286,37 @@
       },
       // 确认修改职位
       ModifyForm (ModifyBuiltForm) {
-        this.$refs[ModifyBuiltForm].validate((valid) => {
-          if (valid) {
-            this.ModifyBuiltForm.jobId = this.jobId
-            console.log(JSON.stringify(this.ModifyBuiltForm))
-            this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/job',
-              submitData: this.ModifyBuiltForm,
-              success: res => {
-                console.log(res)
-                if (res.status === 'OK') {
-                  this.$message({
-                    message: '修改成功！',
-                    type: 'success'
-                  })
-                  this.dialogModify = false
-                  // 重新加载列表数据
-                  this.getListData(this.currentPage, this.pageSize)
-                } else {
-                  this.$message.error(res.message)
-                }
-              }})
-          } else {
-            console.log('error submit!!')
-            return false
-          }
+        this.$confirm('确认修改?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$refs[ModifyBuiltForm].validate((valid) => {
+            if (valid) {
+              this.ModifyBuiltForm.jobId = this.jobId
+              console.log(JSON.stringify(this.ModifyBuiltForm))
+              this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/job',
+                submitData: this.ModifyBuiltForm,
+                success: res => {
+                  console.log(res)
+                  if (res.status === 'OK') {
+                    this.$message({
+                      message: '修改成功！',
+                      type: 'success'
+                    })
+                    this.dialogModify = false
+                    // 重新加载列表数据
+                    this.getListData(this.currentPage, this.pageSize)
+                  } else {
+                    this.$message.error(res.message)
+                  }
+                }})
+            } else {
+              console.log('error submit!!')
+              return false
+            }
+          })
+        }).catch(() => {
         })
       },
       // 选择部门

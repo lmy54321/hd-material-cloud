@@ -82,8 +82,14 @@
             width="100">
           </el-table-column>
           <el-table-column
+            prop="resourceOrder"
+            label="序列"
+            width="50">
+          </el-table-column>
+          <el-table-column
             prop="resourceFor"
-            label="资源归属">
+            label="资源归属"
+            width="100">
           </el-table-column>
           <el-table-column
             prop="parentName"
@@ -122,7 +128,7 @@
     </el-row>
     <!--新增资源弹窗-->
     <el-dialog title="新增资源" :visible.sync="NewDialogVisible"  width="40%"
-               @close="newDialogClose('NewBuiltForm')" :close-on-click-modal="clickClose">
+               @close="newDialogClose('NewBuiltForm')" :close-on-click-modal="clickClose" top="7vh">
       <div class="dialog-bag">
         <!--分配父节点id-->
         <el-dialog
@@ -136,6 +142,7 @@
             <el-button type="primary" @click="parentIdSubmit()">确 定</el-button>
           </div>
         </el-dialog>
+        <!--新建资源表单-->
       <el-form :model="NewBuiltForm" :rules="rules" ref="NewBuiltForm">
         <el-form-item label="资源名称：" :label-width="formLabelWidth" prop="resourceName">
           <el-input v-model="NewBuiltForm.resourceName " autocomplete="off" maxlength="20" show-word-limit></el-input>
@@ -148,9 +155,9 @@
           <el-button type="primary" @click="parentIdAdd()" size="mini">选择<i class="el-icon-plus el-icon--right"></i></el-button>
         </el-form-item>
         <el-form-item label="资源编码：" :label-width="formLabelWidth" prop="resourceCode">
-          <el-input v-model="NewBuiltForm.resourceCode" autocomplete="off" maxlength="30" show-word-limit></el-input>
+          <el-input v-model="NewBuiltForm.resourceCode" placeholder="由数字,字母,_ ,-构成"  autocomplete="off" maxlength="20"  show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="资源路由名称：" :label-width="formLabelWidth" prop="resourceRouteName ">
+        <el-form-item label="资源路由名称：" :label-width="formLabelWidth" prop="resourceRouteName">
           <el-input v-model="NewBuiltForm.resourceRouteName" autocomplete="off" maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="资源标题：" :label-width="formLabelWidth" prop="resourceTitle">
@@ -158,6 +165,12 @@
         </el-form-item>
         <el-form-item label="资源地址：" :label-width="formLabelWidth" prop="resourceUrl">
           <el-input v-model="NewBuiltForm.resourceUrl" autocomplete="off" maxlength="100" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="资源排序：" :label-width="formLabelWidth" prop="resourceOrder">
+          <el-input v-model="NewBuiltForm.resourceOrder" autocomplete="off" placeholder="由数字构成"  maxlength="10" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="图标类名" :label-width="formLabelWidth" prop="resourceIcoCls">
+          <el-input v-model="NewBuiltForm.resourceIcoCls" autocomplete="off" maxlength="100" show-word-limit></el-input>
         </el-form-item>
         <el-row type="flex">
           <el-col :span="12">
@@ -246,15 +259,15 @@
           </el-form-item>
           <el-form-item label="父结点：" :label-width="formLabelWidth" >
             <el-tag
-              :key="resourceTitletag" v-for="resourceTitletag in modifyResourceTitle" closable :disable-transitions="false" @close="modifyResourceTitleClose(resourceTitletag)">
+              :key="resourceTitletag" v-for="resourceTitletag in modifyResourceParentNode" closable :disable-transitions="false" @close="modifyResourceTitleClose(resourceTitletag)">
               {{resourceTitletag}}
             </el-tag>
-            <el-button type="primary" @click="modifyParentIdAdd()" size="mini" disabled>选择<i class="el-icon-plus el-icon--right"></i></el-button>
+            <el-button type="primary" @click="modifyParentIdAdd()" size="mini" >选择<i class="el-icon-plus el-icon--right"></i></el-button>
           </el-form-item>
           <el-form-item label="资源编码：" :label-width="formLabelWidth" prop="resourceCode">
-            <el-input v-model="ModifyForm.resourceCode" autocomplete="off" maxlength="30" disabled show-word-limit></el-input>
+            <el-input v-model="ModifyForm.resourceCode" autocomplete="off" maxlength="20" disabled show-word-limit></el-input>
           </el-form-item>
-          <el-form-item label="资源路由名称：" :label-width="formLabelWidth" prop="resourceRouteName ">
+          <el-form-item label="资源路由名称：" :label-width="formLabelWidth" prop="resourceRouteName">
             <el-input v-model="ModifyForm.resourceRouteName" autocomplete="off" maxlength="50" show-word-limit></el-input>
           </el-form-item>
           <el-form-item label="资源标题：" :label-width="formLabelWidth" prop="resourceTitle">
@@ -263,11 +276,14 @@
           <el-form-item label="资源地址：" :label-width="formLabelWidth" prop="resourceUrl">
             <el-input v-model="ModifyForm.resourceUrl" autocomplete="off" maxlength="100" show-word-limit></el-input>
           </el-form-item>
+          <el-form-item label="资源排序：" :label-width="formLabelWidth" prop="resourceOrder">
+            <el-input v-model="ModifyForm.resourceOrder" autocomplete="off" placeholder="由数字构成"  maxlength="10" show-word-limit></el-input>
+          </el-form-item>
           <el-row type="flex">
             <el-col :span="12">
               <el-form-item label="资源类型：" :label-width="formLabelWidth" prop="resourceType">
                 <template>
-                  <el-select v-model="ModifyForm.resourceTypeValue" placeholder="资源类型" >
+                  <el-select v-model="ModifyForm.resourceType" placeholder="资源类型" >
                     <el-option
                       v-for="item in resourceTypeOptions"
                       :key="item.value"
@@ -279,9 +295,9 @@
               </el-form-item>
             </el-col>
             <el-col  :span="12">
-              <el-form-item label="资源归属：" :label-width="formLabelWidth" prop="resourceType">
+              <el-form-item label="资源归属：" :label-width="formLabelWidth" prop="resourceFor">
                 <template>
-                  <el-select v-model="ModifyForm.resourceForValue" placeholder="资源归属" >
+                  <el-select v-model="ModifyForm.resourceFor" placeholder="资源归属" >
                     <el-option
                       v-for="item in resourceForOptions"
                       :key="item.value"
@@ -297,6 +313,9 @@
             <el-input type="textarea" v-model="ModifyForm.remarkTxt" autocomplete="off" :autosize="{ minRows: 3, maxRows:14}"
                       maxlength="256" show-word-limit>
             </el-input>
+          </el-form-item>
+          <el-form-item label="图标类名" :label-width="formLabelWidth" prop="resourceIcoCls">
+            <el-input v-model="ModifyForm.resourceIcoCls" autocomplete="off" maxlength="100" show-word-limit></el-input>
           </el-form-item>
         </el-form>
         <el-row type="flex">
@@ -351,8 +370,9 @@
         modifyParentIdDialog: false,
         clickClose: false, // 点击modal时 不关闭对话框
         resourceName: [], // 分配的资源名称
-        modifyResourceTitle: [],
+        modifyResourceParentNode: [],
         parentId: '', // 新增资源时传给后台的父节点id
+        modifyParentId: '', // 修改资源时传给后台的父节点id
         parentNodeName: '', // 分配的父节点名
         modifyParentNodeTitle: '',
         parentNodeResourceType: '', // 分配的父节点所属资源类型
@@ -371,26 +391,25 @@
           resourceCode: '',
           resourceRouteName: '',
           resourceTitle: '',
+          resourceOrder: '',
           resourceUrl: '',
           resourceType: 'MEM',
           resourceFor: 'PLATFORM',
-          remarkTxt: ''
+          remarkTxt: '',
+          resourceIcoCls: ''
         },
         ModifyForm: {
           resourceName: '',
           resourceCode: '',
           resourceRouteName: '',
           resourceTitle: '',
+          resourceOrder: '',
           resourceUrl: '',
-          resourceTypeValue: 'MEM',
-          resourceForValue: 'PLATFORM',
+          resourceType: '',
+          resourceFor: '',
           remarkTxt: ''
         },
         resourceTypeOptions: [
-          {
-            value: ' ',
-            label: '所有'
-          },
           {
           value: 'MEM',
           label: '菜单'
@@ -402,10 +421,6 @@
           label: 'Action'
         }],
         resourceForOptions: [
-          {
-            value: ' ',
-            label: '所有'
-          },
           {
           value: 'PLATFORM',
           label: '平台资源'
@@ -420,6 +435,15 @@
           ],
           resourceCode: [
             {required: true, message: '请输入资源编码', trigger: 'change'}
+          ],
+          resourceRouteName: [
+            {required: true, message: '请输入路由名称', trigger: 'change'}
+          ],
+          resourceTitle: [
+            {required: true, message: '请输入资源标题', trigger: 'change'}
+          ],
+          resourceOrder: [
+            {required: true, message: '请输入资源排序', trigger: 'change'}
           ]
         },
         tableDatas: [],
@@ -452,7 +476,7 @@
                   value.resourceFor = '供应商'
                 }
                 if (value.resourceFor === 'PLATFORM') {
-                  value.resourceFor = '平台'
+                  value.resourceFor = '平台资源'
                 }
                 if (value.resourceType === 'BUTTON') {
                   value.resourceType = '按钮'
@@ -492,6 +516,7 @@
       submitForm (NewBuiltForm) {
         this.$refs[NewBuiltForm].validate((valid) => {
           if (valid) {
+            console.log(this.NewBuiltForm)
             this.NewBuiltForm.parentId = this.parentId
             this.$store.dispatch('ajaxPost', {url: '/resourceUrl/v1/resource/res/add',
               submitData: this.NewBuiltForm,
@@ -523,7 +548,7 @@
           this.$refs[ModifyForm].validate((valid) => {
             if (valid) {
               this.ModifyForm.resourceId = this.modifyResourceID
-              console.log(JSON.stringify(this.ModifyForm))
+              this.ModifyForm.parentId = this.modifyParentId
               this.$store.dispatch('ajaxPatch', {url: '/resourceUrl/v1/resource/res/update',
                 submitData: this.ModifyForm,
                 success: res => {
@@ -556,7 +581,7 @@
           })
         } else {
           this.parentIdDialog = true
-          this.$store.dispatch('ajaxGet', {url: '/resourceUrl/v1/resource/res/tree',
+          this.$store.dispatch('ajaxGet', {url: '/resourceUrl/v1/resource/res/mtree',
             success: res => {
               if (res.status === 'OK') {
                 this.treeDatas = res.data.tree
@@ -664,25 +689,42 @@
         this.ModifyForm.resourceName = row.resourceName
         this.ModifyForm.resourceCode = row.resourceCode
         this.ModifyForm.resourceRouteName = row.resourceRouteName
+        this.ModifyForm.resourceUrl = row.resourceUrl
         this.ModifyForm.resourceTitle = row.resourceTitle
-        this.ModifyForm.resourceIcoUrl = row.resourceIcoUrl
-        this.ModifyForm.resourceTypeValue = row.resourceType
-        this.ModifyForm.resourceForValue = row.resourceFor
+        this.ModifyForm.resourceOrder = row.resourceOrder
+        if (row.parentId === null) {
+          this.modifyParentId = ''
+        }
+        if (row.resourceType === '菜单') {
+          this.ModifyForm.resourceType = 'MEM'
+        }
+        if (row.resourceType === '按钮') {
+          this.ModifyForm.resourceType = 'BUTTON'
+        }
+        if (row.resourceType === 'ACTION') {
+          this.ModifyForm.resourceType = 'Action'
+        }
+        if (row.resourceFor === '供应商') {
+          this.ModifyForm.resourceFor = 'SUPPLIER'
+        }
+        if (row.resourceFor === '平台资源') {
+          this.ModifyForm.resourceFor = 'PLATFORM'
+        }
         this.ModifyForm.remarkTxt = row.remarkTxt
-        if (row.resourceTitle !== '') {
-          this.modifyResourceTitle.push(row.resourceTitle)
+        if (row.parentName !== null) {
+          this.modifyResourceParentNode.push(row.parentName)
         }
       },
       // 修改资源时 选择父节点
       modifyParentIdAdd () {
-        if (this.modifyResourceTitle.length === 1) {
+        if (this.modifyResourceParentNode.length === 1) {
           this.$message({
             message: '当前已添加一个父节点，不能再次添加！',
             type: 'error'
           })
         } else {
           this.modifyParentIdDialog = true
-          this.$store.dispatch('ajaxGet', {url: '/resourceUrl/v1/resource/res/tree',
+          this.$store.dispatch('ajaxGet', {url: '/resourceUrl/v1/resource/res/mtree',
             success: res => {
               if (res.status === 'OK') {
                 this.modifyTreeDatas = res.data.tree
@@ -698,24 +740,26 @@
       },
       // 修改资源时 删除父节点
       modifyResourceTitleClose (tag) {
-        this.modifyResourceTitle.splice(this.modifyResourceTitle.indexOf(tag), 1)
+        this.modifyResourceParentNode.splice(this.modifyResourceParentNode.indexOf(tag), 1)
         this.resourceForDisabled = false
       },
       // 修改资源时 点击tree
       modifyNodeClick (data) {
+        console.log(data)
+        this.modifyParentId = data.resourceId
         this.modifyParentNodeTitle = data.resourceTitle
         this.modifyParentNodeResourceType = data.resourceType
         this.modifyParentNodeResourceFor = data.resourceFor
       },
       // 修改资源时 确认选择父节点
       modifyParentIdSubmit () {
-        this.modifyResourceTitle.push(this.modifyParentNodeTitle)
+        this.modifyResourceParentNode.push(this.modifyParentNodeTitle)
         this.modifyParentIdDialog = false
-        this.ModifyForm.resourceTypeValue = this.modifyParentNodeResourceType
+        this.ModifyForm.resourceType = this.modifyParentNodeResourceType
       },
       // 修改资源时 ---清空修改资源表达
       modifyDialogClose () {
-        this.modifyResourceTitle = []
+        this.modifyResourceParentNode = []
       },
       // 修改资源时---资源图片删除
      modifyRemove (file, fileList) {

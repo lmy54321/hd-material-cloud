@@ -7,10 +7,16 @@
 
 <script>
 export default {
-  created () {
+  beforeCreate () {
     // 请求左侧导航菜单数据
-    this.$store.dispatch('ajaxGet', {url: '/api/items',
-      success: function (res) {
+    // this.$store.dispatch('ajaxGet', {url: '/api/items',
+    //   success: function (res) {
+    //   }})
+    console.log(666666666666666666666666)
+    this.$store.dispatch('ajaxGet', {url: 'resourceUrl/v1/resource/res/visit',
+      submitData: {'resourceType': 'MEM '},
+      success: res => {
+
       }})
   }
 }

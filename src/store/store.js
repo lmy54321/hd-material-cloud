@@ -7,11 +7,17 @@ import axios from 'axios'
  * description：封装了网络请求方法，通过vuex即可调用请求后的数据
  */
 Vue.use(Vuex)
-let token = localStorage.getItem('token')
+// let token = sessionStorage.getItem('token')
+console.log(sessionStorage.getItem('token'))
 // 设置axios为form-data
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.headers.common['token'] = token
+axios.interceptors.request.use((config) => {
+  config.headers.common['token'] = sessionStorage.getItem('token')
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})
 axios.defaults.transformRequest = [function (data) {
   let ret = ''
   for (let it in data) {
@@ -22,8 +28,6 @@ axios.defaults.transformRequest = [function (data) {
 var store = new Vuex.Store({
   // 初始化数据，只要有可能的用到的最好都初始化
   state: {
-    text: {name: '李茂源'},
-    data: {sex: '男', age: '22'}
   },
   mutations: {
     // store中的数据只能通过commit mutation来改变
@@ -38,18 +42,17 @@ var store = new Vuex.Store({
         .then(res => { // 调用接口
           data.success(res.data)
           console.log(res.data)
-          context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
         }).catch(error => {
           console.log(error)
         })
     },
     ajaxGet (context, data) {
-      console.log(data.submitData)
-      axios.get(data.url, data.submitData)
+      console.log('请求时' + sessionStorage.getItem('token'))
+        axios.get(data.url, data.submitData)
         .then(res => { // 调用接口
           data.success(res.data)
           console.log(res.data)
-          context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
+          context.commit('changeData', res.data)// 通过接口获取的后台数据保存到store中，等待组件取用
         }).catch(error => {
         console.log(error)
       })
@@ -59,7 +62,6 @@ var store = new Vuex.Store({
         .then(res => { // 调用接口
           data.success(res.data)
           console.log(res.data)
-          context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
         }).catch(error => {
         console.log(error)
       })
@@ -69,7 +71,6 @@ var store = new Vuex.Store({
         .then(res => { // 调用接口
           data.success(res.data)
           console.log(res.data)
-          context.commit('changeData', res.data) // 通过接口获取的后台数据保存到store中，等待组件取用
         }).catch(error => {
         console.log(error)
       })

@@ -40,7 +40,7 @@ Viewer.setDefaults({
 /* eslint-disable no-new */
 // 使用路由钩子函数判断是否登录
 router.beforeEach((to, from, next) => {
-  const role = localStorage.getItem('ms_username')
+  const role = sessionStorage.getItem('ms_username')
   if (!role && to.path !== '/login') {
     next('/login')
     next()//  继续进行管道中的下一个钩子函数
