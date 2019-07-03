@@ -3,7 +3,8 @@
     {
       "icon": "el-icon-menu",
       "index": "dashboard",
-      "title": "系统首页"
+      "title": "系统首页",
+      "subs": []
     },
     {
       "icon": "iconfont icon-jinpaigongyings",
@@ -12,31 +13,38 @@
       "subs": [
         {
           "index": "s_message",
-          "title": "我的投标"
+          "title": "我的投标",
+          "subs": []
         },
         {
           "index": "invitation",
-          "title": "邀请函列表"
+          "title": "邀请函列表",
+          "subs": []
         },
         {
           "index": "institution",
-          "title": "组织机构"
+          "title": "组织机构",
+          "subs": []
         },
         {
           "index": "roleinfo",
-          "title": "角色信息"
+          "title": "角色信息",
+          "subs": []
         },
         {
           "index": "resourceManagement",
-          "title": "资源管理"
+          "title": "资源管理",
+          "subs": []
         },
         {
           "index": "PositionManagement",
-          "title": "职位管理"
+          "title": "职位管理",
+          "subs": []
         },
         {
           "index": "PeopleManagement",
-          "title": "人员信息管理"
+          "title": "人员信息管理",
+          "subs": []
         },
         {
           "index": "supplierinfo",
@@ -44,11 +52,13 @@
           "subs": [
             {
               "index": "supplierinfomodify",
-              "title": "信息完善"
+              "title": "信息完善",
+              "subs": []
             },
             {
               "index": "showinfo",
-              "title": "信息查看"
+              "title": "信息查看",
+              "subs": []
             }
           ]
         },
@@ -58,28 +68,15 @@
           "subs": [
             {
               "index": "bid_bond_payment_certificate",
-              "title": "投标保证金缴纳"
+              "title": "投标保证金缴纳",
+              "subs": []
             },
             {
               "index": "performance_bond_payment_certificate",
-              "title": "履约保证金缴纳"
+              "title": "履约保证金缴纳",
+              "subs": []
             }
           ]
-        }
-      ]
-    },
-    {
-      "icon": "iconfont icon-jingpaicaigoushang",
-      "index": "jingpaicaigoushang",
-      "title": "采购商",
-      "subs": [
-        {
-          "index": "qualified_supplier_settings",
-          "title": "合格供应商设置"
-        },
-        {
-          "index": "qualified_suppliers_list",
-          "title": "合格供应商预设列表"
         }
       ]
     }

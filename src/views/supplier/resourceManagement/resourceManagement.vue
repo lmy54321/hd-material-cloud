@@ -18,7 +18,7 @@
         <template>
           <el-select v-model="queryResourceTypeValue" placeholder="资源类型">
             <el-option
-              v-for="item in resourceTypeOptions"
+              v-for="item in queryResourceTypeOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -30,7 +30,7 @@
         <template>
           <el-select v-model="queryResourceForValue" placeholder="资源归属">
             <el-option
-              v-for="item in resourceForOptions"
+              v-for="item in queryResourceForOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -420,6 +420,21 @@
           value: 'ACTION',
           label: 'Action'
         }],
+        queryResourceTypeOptions: [
+          {
+            value: ' ',
+            label: '所有'
+          },
+          {
+            value: 'MEM',
+            label: '菜单'
+          }, {
+            value: 'BUTTON',
+            label: '按钮'
+          }, {
+            value: 'ACTION',
+            label: 'Action'
+          }],
         resourceForOptions: [
           {
           value: 'PLATFORM',
@@ -428,6 +443,18 @@
           value: 'SUPPLIER',
           label: '供应商'
         }],
+        queryResourceForOptions: [
+          {
+            value: ' ',
+            label: '所有'
+          },
+          {
+            value: 'PLATFORM',
+            label: '平台资源'
+          }, {
+            value: 'SUPPLIER',
+            label: '供应商'
+          }],
         // 校验规则
         rules: {
           resourceName: [

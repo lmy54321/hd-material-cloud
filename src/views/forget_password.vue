@@ -23,7 +23,7 @@
         <el-form-item>
           <el-row type="flex" justify="center">
           <div id="back">
-            <a href="">返回登录页面</a>
+            <a @click="back()">返回登录页面</a>
           </div>
           </el-row>
         </el-form-item>
@@ -51,6 +51,11 @@ export default {
           ]
         }
       }
+  },
+  methods: {
+    back () {
+      this.$router.back()
+    }
   }
 }
 </script>

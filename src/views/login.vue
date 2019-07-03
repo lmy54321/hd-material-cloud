@@ -62,9 +62,7 @@ export default {
                 message: '登录成功！',
                 type: 'success'
               })
-              console.log('请求前')
               sessionStorage.setItem('ms_username', this.ruleForm.account)
-              console.log(res.data.data)
               sessionStorage.setItem('token', res.data.data.token)
               this.$router.push('/')
             } else {

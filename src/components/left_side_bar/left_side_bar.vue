@@ -48,7 +48,6 @@ export default {
     }
   },
   created () {
-    console.log(55555555555)
     this.$store.dispatch('ajaxGet', {url: 'resourceUrl/v1/resource/res/visit',
       submitData: {'resourceType': 'MEM '},
       success: res => {
@@ -57,9 +56,6 @@ export default {
           console.log(res.data.items)
         }
       }})
-  },
-  destroyed () {
-    this.items = []
   }
 }
 </script>

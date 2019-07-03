@@ -110,6 +110,11 @@
             </div>
           </el-col>
         </el-row>
+        <el-row type="flex" justify="center">
+          <el-col :span="3">
+            <el-button type="primary">确认提交</el-button>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
   </div>

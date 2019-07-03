@@ -4,23 +4,10 @@
 <template>
   <div style="width: 100%">
     <el-row type="flex">
-      <el-col :span="7" style="margin-top: 15px;display: flex;align-items: center">
-        <span style="width:100px">邀请函查询：</span>
-        <el-date-picker
-          v-model="value2"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions">
-        </el-date-picker>
-      </el-col>
       <el-col :span="4" style="margin-top: 15px;display: flex;align-items: center">
         <el-input placeholder="请输入邀请函名称" v-model="Queryinvitation">
         </el-input>
-        <el-button type="primary" icon="el-icon-search"></el-button>
+        <el-button type="primary" icon="el-icon-search" @click="queryInvitation()"></el-button>
       </el-col>
     </el-row >
 
@@ -44,19 +31,13 @@
           </el-table-column>
           <el-table-column
             prop="isVoteBond"
-            label="是否需要投标保证金">
+            label="是否需要投标保证金"
+            width="130">
           </el-table-column>
           <el-table-column
             prop="isPromise"
-            label="是否需要履约保证金">
-          </el-table-column>
-          <el-table-column
-            prop="voteStartTime"
-            label="投标开始时间">
-          </el-table-column>
-          <el-table-column
-            prop="voteEndTime"
-            label="投标结束时间">
+            label="是否需要履约保证金"
+            width="130">
           </el-table-column>
           <el-table-column
             prop="tenderContents"
@@ -64,10 +45,22 @@
           </el-table-column>
           <el-table-column
             prop="isConfirm"
-            label="状态">
+            label="状态"
+            width="130">
           </el-table-column>
           <el-table-column
-            label="操作">
+            prop="voteStartTime"
+            label="投标开始时间"
+            width="140">
+          </el-table-column>
+          <el-table-column
+            prop="voteEndTime"
+            label="投标结束时间"
+            width="140">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="130">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -87,8 +80,8 @@
           :current-page.sync="currentPage"
           :page-sizes="[10, 15, 20]"
           :page-size="pageSize"
-          layout="sizes, prev, pager, next"
-          :total="1000">
+          layout="total, sizes, prev, pager, next, jumper"
+          :total=invitationTotal>
         </el-pagination>
       </el-col>
     </el-row>
@@ -233,44 +226,16 @@
         detailDialogVisible: false,
         currentPage: 1, // 当前页
         pageSize: 10, // 页面展示数量
+        invitationTotal: 0, // 总页数
         detailInfo: { }, // 邀请函详情数据
         selectAmount: [],
         tableData: [], // 邀请函列表数据
-        invitationId: '', // 邀请函id
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
-        value2: ''
+        invitationId: '' // 邀请函id
       }
     },
     methods: {
       // 查看详情
       invitationInfo (index, row) {
-        console.log('日期' + this.value2)
         this.detailDialogVisible = true
         this.invitationId = row.invitationId // 保存邀请函id
         console.log(this.invitationId)
@@ -319,97 +284,139 @@
             console.log(this.detailInfo)
           }})
       },
-      // 接受邀请函
-      acceptInvitation () {
-        let params = {}
-        let param = {}
-        params.invitationId = this.invitationId
-        params.confirm = true
-        param.params = params
-        console.log(param)
+      // 处理邀请函
+      handleInvitation (status) {
         this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/invitation',
-          submitData: { 'invitationId': this.invitationId, 'confirm': true },
+          submitData: { 'invitationId': this.invitationId, 'confirm': status },
           success: res => {
             if (res.status === 'OK') {
-              this.$message({
-                message: '接受成功！',
-                type: 'success'
-              })
+              if (status) {
+                this.$message({
+                  message: '接受成功！',
+                  type: 'success'
+                })
+              } else {
+                this.$message({
+                  message: '拒绝成功！',
+                  type: 'success'
+                })
+              }
               this.detailDialogVisible = false
             } else {
-              this.$message.error('接受失败')
+                this.$message.error(res.message)
             }
           }
         })
+      },
+      // 接受邀请函
+      acceptInvitation () {
+        this.handleInvitation(true)
+        // let params = {}
+        // let param = {}
+        // params.invitationId = this.invitationId
+        // params.confirm = true
+        // param.params = params
+        // console.log(param)
+        // this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/invitation',
+        //   submitData: { 'invitationId': this.invitationId, 'confirm': true },
+        //   success: res => {
+        //     if (res.status === 'OK') {
+        //       this.$message({
+        //         message: '接受成功！',
+        //         type: 'success'
+        //       })
+        //       this.detailDialogVisible = false
+        //     } else {
+        //       this.$message.error('接受失败')
+        //     }
+        //   }
+        // })
       },
       // 退回邀请函
       refuseInvitation () {
-        let params = {}
-        let param = {}
-        params.invitationId = this.invitationId
-        params.confirm = false
-        param.params = params
-        console.log(param)
-        this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/invitation',
-          submitData: { 'invitationId': this.invitationId, 'confirm': true },
-          success: res => {
-            if (res.status === 'OK') {
-              this.$message({
-                message: '拒绝成功！',
-                type: 'success'
-              })
-              this.detailDialogVisible = false
-            } else {
-              this.$message.error('拒绝失败')
-            }
-          }
-        })
+        this.handleInvitation(false)
+        // let params = {}
+        // let param = {}
+        // params.invitationId = this.invitationId
+        // params.confirm = false
+        // param.params = params
+        // console.log(param)
+        // this.$store.dispatch('ajaxPatch', {url: '/supplierUrl/v1/supplier/invitation',
+        //   submitData: { 'invitationId': this.invitationId, 'confirm': true },
+        //   success: res => {
+        //     if (res.status === 'OK') {
+        //       this.$message({
+        //         message: '拒绝成功！',
+        //         type: 'success'
+        //       })
+        //       this.detailDialogVisible = false
+        //     } else {
+        //       this.$message.error('拒绝失败')
+        //     }
+        //   }
+        // })
       },
+      // 每页显示多少条数据
       handleSizeChange (val) {
         this.pageSize = val
+        this.getListData(this.currentPage, this.pageSize)
         console.log(`每页 ${val} 条`)
       },
+      // 当前在第几页
       handleCurrentChange (val) {
         this.currentPage = val
+        this.getListData(this.currentPage, this.pageSize)
         console.log(`当前页: ${val}`)
       },
       // 请求列表数据
-      getListData: function () {
+      getListData: function (currentPage, pageSize) {
         let params = {}
         let param = {}
-        params.currentPage = this.currentPage
-        params.pageSize = this.pageSize
+        params.currentPage = currentPage
+        params.pageSize = pageSize
         param.params = params
         this.$store.dispatch('ajaxGet', {url: '/supplierUrl/v1/supplier/invitation',
           submitData: param,
           success: res => {
-          for (let value of res.data) {
-            if (value.isVoteBond === false) {
-              value.isVoteBond = '否'
+            if (res.status === 'OK') {
+              for (let value of res.data.data) {
+                if (value.isVoteBond === false) {
+                  value.isVoteBond = '否'
+                } else {
+                  value.isVoteBond = '是'
+                }
+                if (value.isPromise === false) {
+                  value.isPromise = '否'
+                } else {
+                  value.isPromise = '是'
+                }
+                if (value.isConfirm === null) {
+                  value.isConfirm = '待处理'
+                } else if (value.isConfirm === false) {
+                  value.isConfirm = '已拒绝'
+                } else {
+                  value.isConfirm = '已接受'
+                }
+              }
+              this.tableData = res.data.data
+              this.invitationTotal = res.data.total
             } else {
-              value.isVoteBond = '是'
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
             }
-            if (value.isPromise === false) {
-              value.isPromise = '否'
-            } else {
-              value.isPromise = '是'
-            }
-            if (value.isConfirm === null) {
-              value.isConfirm = '待处理'
-            } else if (value.isConfirm === false) {
-              value.isConfirm = '已拒绝'
-            } else {
-              value.isConfirm = '已接受'
-            }
-          }
-            this.tableData = res.data
           }
         })
+      },
+      // 条件查询
+      queryInvitation () {
+
       }
     },
     // 页面创建时请求列表数据
     created () {
-      this.getListData()
+      this.getListData(this.currentPage, this.pageSize)
     }
   }
 </script>
